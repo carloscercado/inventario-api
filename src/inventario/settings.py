@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'productos.apps.ProductosConfig',
     'ubicacion.apps.UbicacionConfig',
+    'compras.apps.ComprasConfig',
+    'ventas.apps.VentasConfig',
 ]
 
 MIDDLEWARE = [
