@@ -22,6 +22,6 @@ class Producto(models.Model):
                                   help_text="Categoria del producto",
                                   related_name="productos")
     cantidad = models.FloatField(default=0, help_text="cantidad disponible")
-    cantidad_transito = models.FloatField(default=0, help_text="cantidad en transito")
+    #cantidad_transito = models.FloatField(default=0, help_text="cantidad en transito")
     medida = models.CharField(choices=MEDIDAS, max_length=15, help_text="unidad de medida")
     minimo = models.FloatField(default=0, help_text="cantidad minima aceptable")

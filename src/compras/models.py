@@ -1,5 +1,6 @@
 from django.db import models
 from productos.models import Producto
+from decimal import Decimal
 
 class Proveedor(models.Model):
     rif = models.CharField(max_length=15, help_text="rif del proveedor")
@@ -20,12 +21,19 @@ class Compra(models.Model):
     proveedor = models.ForeignKey(Proveedor, related_name="compras",
                                   help_text="proveedor de la compra",
                                   on_delete=models.CASCADE)
-    total = models.FloatField(null=True, default=0,
-                              help_text="Monto total de la compra")
+    total = models.DecimalField(max_digits=16, decimal_places=8,
+                                default=Decimal(0), null=True,
+                                help_text="Monto total de la compra")
     fecha = models.DateField(help_text="Fecha de la compra")
+    procesada = models.BooleanField(help_text="Estatus del procesamiento de la compra",
+                                    default=False)
+
+    @property
+    def eliminable(self):
+        return not self.procesada
 
     def borrar_detalles(self):
-      DetalleCompra.objects.filter(asiento_id=self.id).delete()
+      DetalleCompra.objects.filter(compra_id=self.id).delete()
 
 class DetalleCompra(models.Model):
     compra = models.ForeignKey(Compra, related_name="detalles",
@@ -35,3 +43,9 @@ class DetalleCompra(models.Model):
     producto = models.ForeignKey(Producto, related_name="detalles",
                                  help_text="producto", on_delete=models.CASCADE)
     fecha = models.DateField(null=True, help_text="Fecha de la venta")
+    precio = models.DecimalField(max_digits=16, decimal_places=8,
+                                 help_text="Precio unitario del producto")
+
+    @property
+    def total(self):
+        return self.precio * Decimal(self.cantidad)
