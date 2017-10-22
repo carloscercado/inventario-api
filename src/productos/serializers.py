@@ -12,6 +12,6 @@ class ProductoSerializer(serializers.ModelSerializer):
     detalle = serializers.HyperlinkedIdentityField(view_name='producto-detail', format='html')
     class Meta:
         model = Producto
-        fields = ("nombre", "categoria","detalle", "cantidad", "medida", "minimo",)
+        fields = ("__all__")
         read_only_fields = ("cantidad",)
 

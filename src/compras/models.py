@@ -11,6 +11,9 @@ class Proveedor(models.Model):
     ultimo_pedido = models.DateField(help_text="Fecha del ultimo pedido al proveedor",
                                      null=True)
 
+    def __str__(self):
+      return self.nombre
+
 class Compra(models.Model):
     codigo = models.CharField(max_length=30, unique=True,
                               help_text="codigo de la compra")
@@ -20,6 +23,9 @@ class Compra(models.Model):
     total = models.FloatField(null=True, default=0,
                               help_text="Monto total de la compra")
     fecha = models.DateField(help_text="Fecha de la compra")
+
+    def borrar_detalles(self):
+      DetalleCompra.objects.filter(asiento_id=self.id).delete()
 
 class DetalleCompra(models.Model):
     compra = models.ForeignKey(Compra, related_name="detalles",

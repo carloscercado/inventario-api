@@ -23,7 +23,7 @@ class Unidad(models.Model):
                                help_text="producto a ubicar",
                                on_delete=models.CASCADE)
     codigo = models.CharField(max_length=30, help_text="codigo unico de la unidad")
-    estado = models.BooleanField(default=True, null=True, help_text="Disponible/Usado")
+    estado = models.BooleanField(default=True, help_text="Disponible/Usado")
     estante = models.ForeignKey(Estante, on_delete=models.CASCADE,
                                 help_text="Estante donde se ubicará la unidad",
                                 related_name="unidades")
