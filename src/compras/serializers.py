@@ -13,7 +13,8 @@ class DetalleCompraSerializer(serializers.ModelSerializer):
     class Meta:
         model = DetalleCompra
         read_only_fields = ("total", )
-        fields = ("producto", "cantidad", "precio", "total")
+        fields = ("producto", "cantidad", "precio", "total", "cantidad_procesada",
+                  "procesado", "faltante_por_procesar")
 
 class CompraSerializer(serializers.ModelSerializer):
     Proveedor = ProveedorSerializer
@@ -21,15 +22,14 @@ class CompraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Compra
         fields = ("codigo", "total", "fecha", "detalle", "procesada",
-                  "eliminable", "proveedor")
+                  "eliminable", "proveedor", "bloqueada",)
         read_only_fields = ("total",)
 
 class CompraDetalleSerializer(CompraSerializer):
     detalles = DetalleCompraSerializer(many=True)
     class Meta(CompraSerializer.Meta):
         fields = ("codigo", "total", "fecha", "detalle", "procesada",
-                  "eliminable", "proveedor", "detalles")
-        pass
+                  "eliminable", "proveedor", "bloqueada","detalles",)
 
     @transaction.atomic
     def create(self, datos):

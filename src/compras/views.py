@@ -1,7 +1,8 @@
 from rest_framework import viewsets
-from .models import Proveedor
-from .models import Compra
+from rest_framework.decorators import list_route
+from .models import Proveedor, Compra, DetalleCompra
 from compras import serializers
+from rest_framework.response import Response
 
 
 class CompraVista(viewsets.ModelViewSet):
@@ -17,6 +18,14 @@ class CompraVista(viewsets.ModelViewSet):
                     .select_related("proveedor")\
                     .prefetch_related("detalles")
         return queryset
+
+    @list_route(methods=['get'], url_path=r'codigo/(?P<codigo>[^/]+)')
+    def por_plan_de_cuenta(self, request, codigo):
+        data = self.get_queryset().filter(codigo=codigo).first()
+        serializer = serializers.DetalleCompraSerializer(data.detalles, many=True,
+                                                       context={'request': request})
+        return Response(serializer.data)
+
 
 class ProveedorVista(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()

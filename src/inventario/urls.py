@@ -18,6 +18,7 @@ router.register(r'compras', com.CompraVista)
 router.register(r'proveedores', com.ProveedorVista)
 router.register(r'ventas', ven.VentaVista)
 router.register(r'clientes', ven.ClienteVista)
+router.register(r'unidades', ubi.UnidadVista)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

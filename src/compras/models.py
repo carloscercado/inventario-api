@@ -25,12 +25,24 @@ class Compra(models.Model):
                                 default=Decimal(0), null=True,
                                 help_text="Monto total de la compra")
     fecha = models.DateField(help_text="Fecha de la compra")
-    procesada = models.BooleanField(help_text="Estatus del procesamiento de la compra",
-                                    default=False)
+
+    @property
+    def bloqueada(self):
+        for i in self.detalles.all():
+            if i.faltante_por_procesar != i.cantidad:
+                return True
+        return False
+
+    @property
+    def procesada(self):
+        for i in self.detalles.all():
+            if not i.procesado:
+                return False
+        return True
 
     @property
     def eliminable(self):
-        return not self.procesada
+        return not self.bloqueada
 
     def borrar_detalles(self):
       DetalleCompra.objects.filter(compra_id=self.id).delete()
@@ -45,7 +57,19 @@ class DetalleCompra(models.Model):
     fecha = models.DateField(null=True, help_text="Fecha de la venta")
     precio = models.DecimalField(max_digits=16, decimal_places=8,
                                  help_text="Precio unitario del producto")
+    cantidad_procesada = models.FloatField(help_text="cantidad de procesada", default=0)
 
     @property
     def total(self):
         return self.precio * Decimal(self.cantidad)
+
+    @property
+    def faltante_por_procesar(self):
+        return self.cantidad - self.cantidad_procesada
+
+    @property
+    def procesado(self):
+        return (self.cantidad_procesada == self.cantidad)
+
+    def __str__(self):
+      return str(self.id) + "-" + self.producto.nombre

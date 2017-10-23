@@ -8,10 +8,14 @@ class CategoriaSerializer(serializers.ModelSerializer):
         fields = ("nombre","detalle")
 
 class ProductoSerializer(serializers.ModelSerializer):
-    categoria = CategoriaSerializer
-    detalle = serializers.HyperlinkedIdentityField(view_name='producto-detail', format='html')
+    categoria = CategoriaSerializer()
     class Meta:
         model = Producto
         fields = ("__all__")
         read_only_fields = ("cantidad",)
 
+class ProductoListSerializer(ProductoSerializer):
+    categoria = CategoriaSerializer
+    detalle = serializers.HyperlinkedIdentityField(view_name='producto-detail', format='html')
+    class Meta(ProductoSerializer.Meta):
+        pass
