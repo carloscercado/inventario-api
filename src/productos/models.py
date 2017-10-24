@@ -1,4 +1,5 @@
 from django.db import models
+from decimal import Decimal
 
 class Categoria(models.Model):
     nombre = models.CharField(max_length=30, help_text="nombre de categoria")
@@ -25,3 +26,6 @@ class Producto(models.Model):
     #cantidad_transito = models.FloatField(default=0, help_text="cantidad en transito")
     medida = models.CharField(choices=MEDIDAS, max_length=15, help_text="unidad de medida")
     minimo = models.FloatField(default=0, help_text="cantidad minima aceptable")
+    #precio = models.DecimalField(max_digits=16, decimal_places=8,
+    #                             default=Decimal(0), null=True,
+    #                             help_text="precio del producto")

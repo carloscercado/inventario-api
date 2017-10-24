@@ -59,7 +59,8 @@ class UnidadSerializer(UnidadListSerializer):
         producto = detalle.producto
         for i in range(int(cantidad)):
             unidad = Unidad(**datos, producto=producto.id,
-                            codigo=uuid.uuid4())
+                            codigo=uuid.uuid4(),
+                            fecha=detalle.fecha)
             unidad.save()
             producto.cantidad = producto.cantidad + 1
             detalle.cantidad_procesada = detalle.cantidad_procesada + 1

@@ -18,9 +18,13 @@ class Venta(models.Model):
     cliente = models.ForeignKey(Cliente, related_name="ventas",
                                   help_text="cliente de la venta",
                                   on_delete=models.CASCADE)
-    total = models.FloatField(null=True, default=0,
+    total = models.FloatField(default=0,
                               help_text="Monto total de la venta")
     fecha = models.DateField(help_text="Fecha de la venta")
+
+
+    def borrar_detalles(self):
+        DetalleVenta.objects.filter(venta_id=self.id).delete()
 
 class DetalleVenta(models.Model):
     venta = models.ForeignKey(Venta, related_name="detalles",
