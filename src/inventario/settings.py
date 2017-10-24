@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'compras.apps.ComprasConfig',
     'ventas.apps.VentasConfig',
     'debug_toolbar',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
@@ -46,6 +47,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
+
+SWAGGER_SETTINGS = {
+    'DOC_EXPANSION': 'list',
+    'SUPPORTED_SUBMIT_METHODS': [''],
+    }
 
 
 ROOT_URLCONF = 'inventario.urls'
@@ -86,7 +92,7 @@ DATABASES = {
             'NAME': 'inventario',                      # Or path to database file if using sqlite3.
             # The following settings are not used with sqlite3:
             'USER': 'postgres',
-            'PASSWORD': 'admin',
+            'PASSWORD': 'postgres',
             'HOST': 'localhost',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
             'PORT': '5432',                      # Set to empty string for default.
         }
@@ -130,3 +136,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'), )
