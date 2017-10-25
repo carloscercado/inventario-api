@@ -14,19 +14,19 @@ Para el desarrollo de esta API se utilizó [Python](https://es.wikipedia.org/wik
 
 Clona el proyecto en el local:
 
-    1. `$ git clone https://github.com/carloscercado/inventario-api`
+    1. $ git clone https://github.com/carloscercado/inventario-api
 
 Cambia al directorio raiz del proyecto:
 
-    1. `$ cd inventario-api`
+    1. $ cd inventario-api
 
 Instala las dependencias:
 
-    1. `$ pip install -r requirements.txt`
+    1. $ pip install -r requirements.txt
 
 Configura las credenciales de conexion a la base de datos en el archivo [**settings.py**](https://github.com/carloscercado/inventario-api/blob/master/src/inventario/settings.py)
 
-    `DATABASES = {
+    DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.postgresql_psycopg2', 
                 'NAME': 'inventario', #base de datos                     
@@ -35,11 +35,11 @@ Configura las credenciales de conexion a la base de datos en el archivo [**setti
                 'HOST': 'localhost',    #servidor                  
                 'PORT': '5432',  #puerto                   
             }
-    }`
+    }
 
-Conrre las migraciones:
+Corre las migraciones:
 
-    1. `python src/manage.py migrate`
+    1. python src/manage.py migrate
 
 ### Instrucciones detalladas
 
