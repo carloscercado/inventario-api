@@ -2,35 +2,48 @@
 
 # API Inventario
 
-Inventario API is a _short description_. It is built with [Python][0] using the [Django Web Framework][1].
+El diseño de grandes aplicaciones para empresas está evolucionando de arquitecturas [monolíticas](https://tallerbd.wikispaces.com/Arquitectura+Monol%C3%ADtica.)  a  arquitecturas  basadas  en  [microservicios](https://es.wikipedia.org/wiki/Arquitectura_de_microservicios).  Estas  son  particularmente adecuadas  para  ejecutarse  en  entornos [cloud](https://es.wikipedia.org/wiki/Computación_en_la_nube)  porque  cada  servicio  puede  ser desarrollado,  desplegado  y  gestionado  individualmente,  lo  que  permite  un  control mucho más detallado y un alto grado de **escalabilidad**.
+ 
+Basado en un ejemplo concreto, se desarrolló un sistema para la gestion de Inventarios bajo una arquitectura de microservicios, mostrando los desafíos de ésta en un entorno de intranet, pero que puede ser facilmente acoplado a un entorno cloud.
 
-This project has the following basic apps:
+Para el desarrollo de esta API se utilizó [Python](https://es.wikipedia.org/wiki/Python) como lenguaje de programación y el Framework [Django Rest Framework](www.django-rest-framework.org) para la creacion de todos los [End Point](https://en.wikipedia.org/wiki/Web_API#Endpoints) del API.
 
-* App1 (short desc)
-* App2 (short desc)
-* App3 (short desc)
-
-## Installation
+## Instalación
 
 ### Quick start
 
-To set up a development environment quickly, first install Python 3. It
-comes with virtualenv built-in. So create a virtual env by:
+Clona el proyecto en el local:
 
-    1. `$ python3 -m venv inventario-api`
-    2. `$ . inventario-api/bin/activate`
+    1. `$ git clone https://github.com/carloscercado/inventario-api`
 
-Install all dependencies:
+Cambia al directorio raiz del proyecto:
 
-    pip install -r requirements.txt
+    1. `$ cd inventario-api`
 
-Run migrations:
+Instala las dependencias:
 
-    python manage.py migrate
+    1. `$ pip install -r requirements.txt`
 
-### Detailed instructions
+Configura las credenciales de conexion a la base de datos en el archivo [**settings.py**](https://github.com/carloscercado/inventario-api/blob/master/src/inventario/settings.py)
 
-Take a look at the docs for more information.
+    `DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql_psycopg2', 
+                'NAME': 'inventario', #base de datos                     
+                'USER': 'postgres', #nombre de usuario
+                'PASSWORD': 'admin', #clave
+                'HOST': 'localhost',    #servidor                  
+                'PORT': '5432',  #puerto                   
+            }
+    }`
 
+Conrre las migraciones:
+
+    1. `python src/manage.py migrate`
+
+### Instrucciones detalladas
+
+Para mas informacion sobre funcionamiento de las herramientas utilizadas en el proyecto visitar:
 [0]: https://www.python.org/
 [1]: https://www.djangoproject.com/
+[2]: https://www.django-rest-framework.org/
