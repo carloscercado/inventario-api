@@ -41,6 +41,14 @@ Corre las migraciones:
 
     1. python src/manage.py migrate
 
+### Documentacion del API
+
+Para ver la documentacion del API debe correr el servidor
+
+    1. $ python src/manage.py runserver
+
+Luego, en su navegador dirijase a la direccion http://127.0.0.1:8000/docs
+
 ### Instrucciones detalladas
 
 Para mas informacion sobre funcionamiento de las herramientas utilizadas en el proyecto visitar:
