@@ -5,6 +5,14 @@ from productos import serializers
 
 
 class CategoriaVista(viewsets.ModelViewSet):
+    """
+    list: Lista todas las categorias
+    create: Registra una categoria
+    retrieve: Busca una categoria
+    partial_update: Modifica parcialmente una categoria  
+    update: Modifica una categoria
+    delete: Elimina una categoria
+    """
     queryset = Categoria.objects.all()
     serializer_class = serializers.CategoriaSerializer
 
@@ -13,7 +21,7 @@ class ProductoVista(viewsets.ModelViewSet):
     list: Lista todos los productos
     create: Registra un producto
     retrieve: Busca un producto
-    partial_update: Modifica un producto  
+    partial_update: Modifica parcialmente el producto  
     update: Modifica un producto
     delete: Elimina un producto
     """

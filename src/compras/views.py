@@ -6,6 +6,14 @@ from rest_framework.response import Response
 
 
 class CompraVista(viewsets.ModelViewSet):
+    """
+    list: Lista todas las compras
+    create: Registra una compra
+    retrieve: Busca una compra
+    partial_update: Modifica parcialmente una compra  
+    update: Modifica una compra
+    delete: Elimina una compra
+    """
     queryset = Compra.objects.all()
 
     def get_serializer_class(self):
@@ -28,5 +36,13 @@ class CompraVista(viewsets.ModelViewSet):
 
 
 class ProveedorVista(viewsets.ModelViewSet):
+    """
+    list: Lista todos los proveedores
+    create: Registra un proveedor
+    retrieve: Busca un proveedor
+    partial_update: Modifica parcialmente un proveedor  
+    update: Modifica un proveedor
+    delete: Elimina un proveedor
+    """
     queryset = Proveedor.objects.all()
     serializer_class = serializers.ProveedorSerializer
