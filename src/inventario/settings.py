@@ -92,11 +92,11 @@ WSGI_APPLICATION = 'inventario.wsgi.application'
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': 'd7u68a0oj23dvf',                      # Or path to database file if using sqlite3.
+            'NAME': 'dd9nbgfs77d1n2',                      # Or path to database file if using sqlite3.
             # The following settings are not used with sqlite3:
-            'USER': 'flhvzjqfouxppa',
-            'PASSWORD': '60afc18042903382aa0a6a92ab7e8edd0365220d7de66a27487ff61dbc80ce90',
-            'HOST': 'ec2-54-235-213-202.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
+            'USER': 'whddpioksxbawp',
+            'PASSWORD': '479970f7b5ad684bb0652cd2c18de37b1c6897059750d8644efbf04435de0e26',
+            'HOST': 'ec2-50-16-204-127.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
             'PORT': '5432',                      # Set to empty string for default.
         }
     }
