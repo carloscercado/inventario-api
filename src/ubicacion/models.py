@@ -32,6 +32,7 @@ class Unidad(models.Model):
                                 help_text="Estante donde se ubicará la unidad",
                                 related_name="unidades")
     producto = models.IntegerField(default=0)
+    fecha = models.DateField(null=True, help_text="Fecha de la ingreso")
 
     @property
     def cantidad(self):
