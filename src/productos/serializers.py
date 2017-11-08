@@ -8,7 +8,6 @@ class CategoriaSerializer(serializers.ModelSerializer):
         fields = ("nombre","detalle")
 
 class ProductoSerializer(serializers.ModelSerializer):
-    categoria = CategoriaSerializer()
     class Meta:
         model = Producto
         fields = ("__all__")
