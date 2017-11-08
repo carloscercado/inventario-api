@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'productos.apps.ProductosConfig',
     'ubicacion.apps.UbicacionConfig',
     'compras.apps.ComprasConfig',
-    'ventas.apps.VentasConfig',
+    'salidas.apps.SalidasConfig',
     'debug_toolbar',
     'rest_framework_swagger',
 ]

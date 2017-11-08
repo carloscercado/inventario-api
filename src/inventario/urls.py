@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from productos import views as pro
 from ubicacion import views as ubi
-from ventas import views as ven
+from salidas import views as sal
 from compras import views as com
 from .enrrutador import RaizRouter
 import debug_toolbar
@@ -18,8 +18,8 @@ router.register(r'almacenes', ubi.AlmacenVista)
 router.register(r'estantes', ubi.EstanteVista)
 router.register(r'compras', com.CompraVista)
 router.register(r'proveedores', com.ProveedorVista)
-router.register(r'ventas', ven.VentaVista)
-router.register(r'clientes', ven.ClienteVista)
+router.register(r'salidas', sal.SalidaVista)
+router.register(r'clientes', sal.ClienteVista)
 router.register(r'unidades', ubi.UnidadVista)
 
 urlpatterns = [

@@ -1,26 +1,26 @@
 from rest_framework import viewsets
-from .models import Cliente, Venta
-from ventas import serializers
+from .models import Cliente, Salida
+from salidas import serializers
 
 
-class VentaVista(viewsets.ModelViewSet):
+class SalidaVista(viewsets.ModelViewSet):
     """
-    list: Lista todas las ventas
-    create: Registra una venta
-    retrieve: Busca una venta
-    partial_update: Modifica parcialmente una venta  
-    update: Modifica una venta
-    delete: Elimina una venta
+    list: Lista todas las salidas
+    create: Registra una salida
+    retrieve: Busca una salida
+    partial_update: Modifica parcialmente una salida  
+    update: Modifica una salida
+    delete: Elimina una salida
     """
-    queryset = Venta.objects.all()
+    queryset = Salida.objects.all()
 
     def get_serializer_class(self):
         if self.action == 'list':
-            return serializers.VentaListSerializer
-        return serializers.VentaSerializer
+            return serializers.SalidaListSerializer
+        return serializers.SalidaSerializer
 
     def get_queryset(self):
-        queryset = Venta.objects.all()\
+        queryset = Salida.objects.all()\
                     .select_related("cliente")\
                     .prefetch_related("detalles")
         return queryset
