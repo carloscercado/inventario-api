@@ -57,6 +57,20 @@ class CasosPruebas(UtilCasosPrueba):
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(respuesta.json()["id"], producto.id)
 
+    def test_listar_producto(self):
+        """
+        Prueba listar un producto
+        """
+        producto = Producto(nombre="Mi producto", medida=Producto.KG,
+                            categoria=self.registrar_categoria("mi categoria"))
+        producto.save()
+        producto = Producto(nombre="Mi producto 2", medida=Producto.KG,
+                            categoria=self.registrar_categoria("mi categoria"))
+        producto.save()
+        respuesta = self.client.get("/productos")
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(len(respuesta.json()), 2)
+
     def test_registrar_producto_sin_campo(self):
         """
         Prueba el registro de un producto con datos faltantes
