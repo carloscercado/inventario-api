@@ -8,7 +8,7 @@ class AlmacenVista(viewsets.ModelViewSet):
     list: Lista todos los almacenes
     create: Registra una almacen
     retrieve: Busca una almacen
-    partial_update: Modifica parcialmente una almacen  
+    partial_update: Modifica parcialmente una almacen
     update: Modifica una almacen
     delete: Elimina una almacen
     """
@@ -24,7 +24,7 @@ class EstanteVista(viewsets.ModelViewSet):
     list: Lista todos los estantes
     create: Registra un estante
     retrieve: Busca un estante
-    partial_update: Modifica parcialmente un estante  
+    partial_update: Modifica parcialmente un estante 
     update: Modifica un estante
     delete: Elimina un estante
     """

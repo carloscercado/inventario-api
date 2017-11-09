@@ -9,13 +9,14 @@ class AlmacenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Almacen
         fields = ("__all__")
+        read_only_fields = ("eliminable", )
 
 class EstanteSerializer(serializers.ModelSerializer):
     almacen = AlmacenSerializer
     detalle = serializers.HyperlinkedIdentityField(view_name='estante-detail', format='html')
     class Meta:
         model = Estante
-        fields = ("__all__")
+        fields = ("nombre", "capacidad_total", "capacidad_restante", "detalle")
         read_only_fields = ("capacidad_restante",)
 
     @transaction.atomic
@@ -27,12 +28,36 @@ class EstanteSerializer(serializers.ModelSerializer):
         return estante
 
 class AlmacenDetalleSerializer(serializers.ModelSerializer):
-    detalle = serializers.HyperlinkedIdentityField(view_name='almacen-detail', format='html')
     estantes = EstanteSerializer(many=True)
     class Meta:
         model = Almacen
-        fields = ("nombre", "direccion", "telefono", "detalle",
-                  "estantes")
+        fields = ("id", "nombre", "direccion", "telefono", "estantes")
+        #read_only_fields = ("eliminable", "estantes", "detalle")
+
+    @transaction.atomic
+    def create(self, datos):
+        estantes = datos.pop("estantes")
+        almacen = Almacen.objects.create(**datos)
+        self.registrar_estantes(almacen, estantes)
+        return almacen
+
+    @transaction.atomic
+    def update(self, almacen, datos):
+        estantes = datos.pop("estantes")
+        for key, value in datos.items():
+            setattr(almacen, key, value)
+        #almacen.borrar_estantes()
+        #self.registrar_estantes(almacen, estantes)
+        return almacen
+
+    def registrar_estantes(self, almacen, estantes):
+        registros = []
+        for i in estantes:
+            estante = Estante(**i, almacen=almacen,
+                              capacidad_restante=i.get("capacidad_total"))
+            registros.append(estante)
+        almacen.save()
+        almacen.estantes.bulk_create(registros)
 
 class UnidadListSerializer(serializers.ModelSerializer):
     class Meta:
