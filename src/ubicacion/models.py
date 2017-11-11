@@ -25,7 +25,7 @@ class Seccion(models.Model):
                                   help_text="Almacen al que pertenece",
                                   related_name="secciones")
     volumen_restante = models.FloatField(default=0,
-                                           help_text="capacidad disponible en el almacen")
+                                         help_text="capacidad disponible en el almacen")
     longitud = models.FloatField(help_text="longitud del almacen")
     anchura =  models.FloatField(help_text="anchura del almacen")
     altura = models.FloatField(help_text="altura del almacen")
@@ -41,7 +41,7 @@ class Unidad(models.Model):
     unidad = models.ForeignKey(DetalleCompra, related_name="unidades",
                                help_text="producto a ubicar",
                                on_delete=models.CASCADE)
-    codigo = models.CharField(max_length=64, help_text="codigo unico de la unidad")
+    codigo = models.CharField(max_length=32, help_text="codigo unico de la unidad")
     estado = models.BooleanField(default=True, help_text="Disponible/Usado")
     seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE,
                                 help_text="Estante donde se ubicará la unidad",
@@ -54,4 +54,4 @@ class Unidad(models.Model):
 
     @property
     def volumen(self):
-        return self.longitud * self.anchura * self.altura
+        return self.longitud * self.ancho * self.altura

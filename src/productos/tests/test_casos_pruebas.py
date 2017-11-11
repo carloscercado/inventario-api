@@ -1,8 +1,15 @@
 from .utils_casos_pruebas import UtilCasosPrueba
 from productos.models import Producto, Categoria
+from ubicacion.tests import utils_casos_pruebas
 import pdb
 
 class CasosPruebas(UtilCasosPrueba):
+
+    """
+    ********************
+    ******Productos******
+    ********************
+    """
 
     def test_registrar_producto(self):
         """
@@ -109,12 +116,45 @@ class CasosPruebas(UtilCasosPrueba):
         self.assertEqual(respuesta.status_code, 400)
         self.assertNotEqual(respuesta.json().get("nombre"), None)
 
+    def test_buscar_producto_cantidad(self):
+        """
+        Prueba buscar un producto y su cantidad
+        """
+        producto = Producto(nombre="Mi producto", medida=Producto.KG,
+                            categoria=self.registrar_categoria("mi categoria"))
+        producto.save()
+        _id = str(producto.id)
+        respuesta = self.client.get("/productos/" + _id)
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(respuesta.json()["cantidad"], 0)
 
 
+        compra = self.registrar_compra_con_detalles(categoria_nombre="Otra categoria")
+        detalle1 = compra.detalles.all()[0]
+        detalle1.producto = producto
+        detalle1.save()
+        clase = utils_casos_pruebas.UtilCasosPrueba()
+        seccion = clase.registrar_seccion()
+        payload = {
+            "unidad": detalle1.id,
+            "seccion": seccion.id,
+            "longitud": 1000,
+            "altura": 1000,
+            "ancho": 1000,
+            "cantidad": 1
+        }
+        respuesta = self.client.post("/unidades", payload, format="json")
+        self.assertEqual(respuesta.status_code, 201)
 
+        respuesta = self.client.get("/productos/" + _id)
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(respuesta.json()["cantidad"], 1)
 
-
-
+    """
+    ********************
+    ******Categoria******
+    ********************
+    """
 
     def test_registrar_categoria(self):
         """

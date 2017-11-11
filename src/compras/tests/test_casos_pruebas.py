@@ -38,7 +38,7 @@ class CasosPruebas(UtilCasosPrueba):
             "telefono": "0293144726"
         }
         _id = str(proveedor.id)
-        respuesta = self.client.put("/proveedores/" + _id, payload)
+        respuesta = self.client.put("/proveedores/" + _id, payload, format="json")
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(respuesta.json()["id"], proveedor.id)
         self.assertNotEqual(respuesta.json()["nombre"], proveedor.nombre)
@@ -182,3 +182,9 @@ class CasosPruebas(UtilCasosPrueba):
         respuesta = self.client.get("/compras")
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(len(respuesta.json()), 2)
+
+    """
+    probar procesar compra
+    probar bloquear una compra
+    probar eliminar/modificar compra bloqueada
+    """

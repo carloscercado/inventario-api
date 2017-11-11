@@ -1,7 +1,7 @@
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from .models import Almacen, Seccion, Unidad
 from django.db import transaction
-from .exceptions import CantidadInvalidadError, ProductoProcesadoError
 import uuid
 
 class AlmacenSerializer(serializers.ModelSerializer):
@@ -58,7 +58,7 @@ class AlmacenDetalleSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def update(self, almacen, datos):
-        seciones = datos.pop("seciones")
+        secciones = datos.pop("secciones")
         for key, value in datos.items():
             setattr(almacen, key, value)
         #almacen.borrar_seciones()
@@ -68,8 +68,8 @@ class AlmacenDetalleSerializer(serializers.ModelSerializer):
     def registrar_secciones(self, almacen, secciones):
         registros = []
         for i in secciones:
-            seccion = Estante(**i, almacen=almacen,
-                              capacidad_restante=i.get("capacidad_total"))
+            seccion = Seccion(**i, almacen=almacen)
+            seccion.volumen_restante = seccion.volumen
             registros.append(seccion)
         almacen.save()
         almacen.secciones.bulk_create(registros)
@@ -78,30 +78,41 @@ class UnidadListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Unidad
         fields = ("__all__")
-        read_only_fields = ("estado", "codigo", "producto")
 
 class UnidadSerializer(UnidadListSerializer):
+    class Meta(UnidadListSerializer.Meta):
+        model = Unidad
+        fields = ("id","unidad", "seccion", "volumen", "estado", "codigo",
+                   "altura", "longitud", "ancho",)
+        read_only_fields = ("estado", "codigo", "producto", "volumen")
+
+class UnidadCreateSerializer(UnidadListSerializer):
     cantidad = serializers.FloatField(required=True)
     class Meta(UnidadListSerializer.Meta):
         model = Unidad
-        fields = ("unidad", "seccion", "estado", "codigo", "cantidad")
-        read_only_fields = ("estado", "codigo", "producto")
+        fields = ("id","unidad", "seccion", "volumen", "estado", "codigo", "cantidad",
+                   "altura", "longitud", "ancho",)
+        read_only_fields = ("estado", "codigo", "producto", "volumen")
 
     @transaction.atomic
     def create(self, data):
         detalle = data.get("unidad")
         cantidad = self.data.pop("cantidad")
-        data.pop("cantidad")
-        self.validar_cantidad(detalle, cantidad)
+        data.pop("cantidad") # quitarlo de validated_data
         return self.registrar_unidad(cantidad, data, detalle)
 
     def registrar_unidad(self, cantidad, datos, detalle):
+        self.validar_cantidad(detalle, cantidad)
         producto = detalle.producto
         for i in range(int(cantidad)):
             unidad = Unidad(**datos, producto=producto.id,
-                            codigo=uuid.uuid4(),
+                            codigo=uuid.uuid4().hex,
                             fecha=detalle.fecha)
             unidad.save()
+            seccion = unidad.seccion
+            self.validar_disponibilidad_seccion(seccion, unidad.volumen)
+            seccion.volumen_restante = seccion.volumen_restante - unidad.volumen
+            seccion.save()
             producto.cantidad = producto.cantidad + 1
             detalle.cantidad_procesada = detalle.cantidad_procesada + 1
         detalle.save()
@@ -111,6 +122,21 @@ class UnidadSerializer(UnidadListSerializer):
     def validar_cantidad(self, detalle, cantidad):
         disponible = detalle.faltante_por_procesar
         if cantidad == disponible:
-            raise ProductoProcesadoError()
+            error = {
+                "cantidad": "invalida. No hay productos para procesar"
+            }
+            raise ValidationError(error)
         if cantidad > disponible:
-            raise CantidadInvalidadError()
+            error = {
+                "cantidad": "invalida. Es mayor a la disponible ["+str(disponible)+"]"
+            }
+            raise ValidationError(error)
+
+    def validar_disponibilidad_seccion(self, seccion, volumen):
+        disponible = seccion.volumen_restante
+        if volumen > disponible:
+            error = {
+                "cantidad": "el espacio disponible en la seccion escogida no es suficiente",
+                "seccion": "disponible en seccion ["+str(disponible)+"] - volumen a ubicar ["+str(volumen)+"]"
+            }
+            raise ValidationError(error)

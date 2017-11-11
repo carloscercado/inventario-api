@@ -51,6 +51,8 @@ class UnidadVista(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'list':
             return serializers.UnidadListSerializer
+        if self.action == "create":
+            return serializers.UnidadCreateSerializer
         return serializers.UnidadSerializer
 
     def get_queryset(self):

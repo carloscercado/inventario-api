@@ -1,5 +1,5 @@
 from .utils_casos_pruebas import UtilCasosPrueba
-from ubicacion.models import Almacen, Seccion
+from ubicacion.models import Almacen, Seccion, Unidad
 import pdb
 
 class CasosPruebas(UtilCasosPrueba):
@@ -28,11 +28,15 @@ class CasosPruebas(UtilCasosPrueba):
             "secciones": [
                 {
                     "nombre": "mi estante",
-                    "capacidad_total": 1000
+                    "anchura": 1000,
+                    "altura": 1000,
+                    "longitud": 1000
                 },
                 {
                     "nombre": "mi estante 2",
-                    "capacidad_total": 2000
+                    "anchura": 1000,
+                    "altura": 1000,
+                    "longitud": 1000
                 }
             ]
         }
@@ -42,7 +46,7 @@ class CasosPruebas(UtilCasosPrueba):
 
     def test_modificar_almacen(self):
         """
-        Prueba modificar  un almacen
+        Prueba modificar un almacen
         """
         almacen = self.registrar_almacen()
         payload = {
@@ -52,7 +56,7 @@ class CasosPruebas(UtilCasosPrueba):
             "secciones": []
         }
         _id = str(almacen.id)
-        respuesta = self.client.put("/almacenes/" + _id, payload)
+        respuesta = self.client.put("/almacenes/" + _id, payload, format="json")
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(respuesta.json()["id"], almacen.id)
         self.assertNotEqual(respuesta.json()["nombre"], almacen.nombre)
@@ -124,7 +128,7 @@ class CasosPruebas(UtilCasosPrueba):
             "almacen": seccion.id
         }
         _id = str(seccion.id)
-        respuesta = self.client.put("/secciones/" + _id, payload)
+        respuesta = self.client.put("/secciones/" + _id, payload, format="json")
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(respuesta.json()["id"], seccion.id)
         self.assertNotEqual(respuesta.json()["nombre"], seccion.nombre)
@@ -178,3 +182,138 @@ class CasosPruebas(UtilCasosPrueba):
         volumen_esperado = payload["longitud"] * payload["anchura"] * payload["altura"]
         self.assertEqual(respuesta.json()["volumen"], volumen_esperado)
         self.assertEqual(respuesta.json()["volumen_restante"], volumen_esperado)
+
+    """
+    ********************
+    ******Unidades******
+    ********************
+    """
+
+    def test_registrar_unidad(self):
+        """
+        Prueba el registro de una unidad
+        """
+        compra = self.registrar_compra_con_detalles()
+        detalle1 = compra.detalles.all()[0]
+        seccion = self.registrar_seccion()
+        payload = {
+            "unidad": detalle1.id,
+            "seccion": seccion.id,
+            "longitud": 1000,
+            "altura": 1000,
+            "ancho": 1000,
+            "cantidad": 1
+        }
+        respuesta = self.client.post("/unidades", payload, format="json")
+        self.assertEqual(respuesta.status_code, 201)
+
+    def test_registrar_unidad_sobre_volumen(self):
+        """
+        Prueba el registro de una unidad con sobre volumen
+        """
+        compra = self.registrar_compra_con_detalles()
+        detalle1 = compra.detalles.all()[0]
+        seccion = self.registrar_seccion()
+        payload = {
+            "unidad": detalle1.id,
+            "seccion": seccion.id,
+            "longitud": 1000,
+            "altura": 1000,
+            "ancho": 1100,
+            "cantidad": 1
+        }
+        respuesta = self.client.post("/unidades", payload, format="json")
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertNotEqual(respuesta.json()["cantidad"], None)
+
+    def test_registrar_unidad_sobre_volumen_cantidad(self):
+        """
+        Prueba el registro de una unidad con sobre volumen por cantidad
+        """
+        compra = self.registrar_compra_con_detalles()
+        detalle1 = compra.detalles.all()[0]
+        seccion = self.registrar_seccion()
+        payload = {
+            "unidad": detalle1.id,
+            "seccion": seccion.id,
+            "longitud": 1000,
+            "altura": 1000,
+            "ancho": 800,
+            "cantidad": 2
+        }
+        respuesta = self.client.post("/unidades", payload, format="json")
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertNotEqual(respuesta.json()["seccion"], None)
+
+    def test_registrar_unidad_sobre_cantidad(self):
+        """
+        Prueba el registro de una unidad con sobre cantidad
+        """
+        compra = self.registrar_compra_con_detalles()
+        detalle1 = compra.detalles.all()[0]
+        seccion = self.registrar_seccion()
+        payload = {
+            "unidad": detalle1.id,
+            "seccion": seccion.id,
+            "longitud": 2,
+            "altura": 3,
+            "ancho": 4,
+            "cantidad": 20
+        }
+        respuesta = self.client.post("/unidades", payload, format="json")
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertNotEqual(respuesta.json()["cantidad"], None)
+
+    def test_modificar_unidad(self):
+        """
+        Prueba modificar una unidad
+        """
+        unidad = self.registrar_unidad(1000, 1000, 1000)
+        payload = {
+            "unidad": unidad.unidad.id,
+            "seccion": unidad.seccion.id,
+            "longitud": 200,
+            "altura": 1000,
+            "ancho": 1000,
+            "cantidad": 1
+        }
+        _id = str(unidad.id)
+        respuesta = self.client.put("/unidades/" + _id, payload, format="json")
+        self.assertEqual(respuesta.status_code, 200)
+
+        self.assertEqual(respuesta.json()["id"], unidad.id)
+        self.assertNotEqual(respuesta.json()["longitud"], unidad.longitud)
+
+        volumen_esperado = payload["longitud"] * payload["ancho"] * payload["altura"]
+        self.assertEqual(respuesta.json()["volumen"], volumen_esperado)
+
+    def test_eliminar_unidad(self):
+        """
+        Prueba eliminar una unidad
+        """
+        unidad = self.registrar_unidad(1000, 1000, 1000)
+        _id = str(unidad.id)
+        respuesta = self.client.delete("/unidades/" + _id)
+        self.assertEqual(respuesta.status_code, 204)
+        self.assertEqual(Unidad.objects.filter(id=unidad.id).first(), None)
+
+    def test_buscar_unidad(self):
+        """
+        Prueba buscar una unidad
+        """
+        unidad = self.registrar_unidad(1000, 1000, 1000)
+        _id = str(unidad.id)
+        respuesta = self.client.get("/unidades/" + _id)
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(respuesta.json()["id"], unidad.id)
+
+    def test_listar_unidad(self):
+        """
+        Prueba listar unidades
+        """
+        unidad = self.registrar_unidad(1000, 1000, 1000)
+        unidad = self.registrar_unidad(1000, 1000, 1000, codigo="000013", categoria_nombre="otra")
+
+        respuesta = self.client.get("/unidades")
+        self.assertEqual(respuesta.status_code, 200)
+        self.assertEqual(len(respuesta.json()), 2)
