@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Almacen, Estante, Unidad
+from .models import Almacen, Seccion, Unidad
 from django.db import transaction
 from .exceptions import CantidadInvalidadError, ProductoProcesadoError
 import uuid
@@ -9,55 +9,70 @@ class AlmacenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Almacen
         fields = ("__all__")
-        read_only_fields = ("eliminable", )
+        read_only_fields = ("eliminable", "volumen")
 
-class EstanteSerializer(serializers.ModelSerializer):
-    almacen = AlmacenSerializer
-    detalle = serializers.HyperlinkedIdentityField(view_name='estante-detail', format='html')
+
+class SeccionAlmacenSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Estante
-        fields = ("nombre", "capacidad_total", "capacidad_restante", "detalle")
-        read_only_fields = ("capacidad_restante",)
+        model = Seccion
+        fields = ("id", "nombre", "volumen", "volumen_restante",
+                  "longitud", "altura", "anchura", "almacen")
+        read_only_fields = ("volumen","volumen_restante")
 
     @transaction.atomic
     def create(self, data):
-        plan = data.get("plan")
-        estante = Estante(**data)
-        estante.capacidad_restante = estante.capacidad_total
-        estante.save()
-        return estante
+        seccion = Seccion(**data)
+        seccion.volumen_restante = seccion.volumen
+        seccion.save()
+        return seccion
+
+class SeccionSerializer(serializers.ModelSerializer):
+    almacen = AlmacenSerializer
+    detalle = serializers.HyperlinkedIdentityField(view_name='seccion-detail', format='html')
+    class Meta:
+        model = Seccion
+        fields = ("id", "nombre", "volumen", "volumen_restante", "detalle",
+                  "longitud", "altura", "anchura")
+        read_only_fields = ("volumen","volumen_restante")
+
+    @transaction.atomic
+    def create(self, data):
+        seccion = Seccion(**data)
+        seccion.volumen_restante = seccion.volumen
+        seccion.save()
+        return seccion
 
 class AlmacenDetalleSerializer(serializers.ModelSerializer):
-    estantes = EstanteSerializer(many=True)
+    secciones = SeccionSerializer(many=True)
     class Meta:
         model = Almacen
-        fields = ("id", "nombre", "direccion", "telefono", "estantes")
+        fields = ("id", "nombre", "direccion", "telefono", "secciones")
         #read_only_fields = ("eliminable", "estantes", "detalle")
 
     @transaction.atomic
     def create(self, datos):
-        estantes = datos.pop("estantes")
+        secciones = datos.pop("secciones")
         almacen = Almacen.objects.create(**datos)
-        self.registrar_estantes(almacen, estantes)
+        self.registrar_secciones(almacen, secciones)
         return almacen
 
     @transaction.atomic
     def update(self, almacen, datos):
-        estantes = datos.pop("estantes")
+        seciones = datos.pop("seciones")
         for key, value in datos.items():
             setattr(almacen, key, value)
-        #almacen.borrar_estantes()
-        #self.registrar_estantes(almacen, estantes)
+        #almacen.borrar_seciones()
+        #self.registrar_seciones(almacen, estantes)
         return almacen
 
-    def registrar_estantes(self, almacen, estantes):
+    def registrar_secciones(self, almacen, secciones):
         registros = []
-        for i in estantes:
-            estante = Estante(**i, almacen=almacen,
+        for i in secciones:
+            seccion = Estante(**i, almacen=almacen,
                               capacidad_restante=i.get("capacidad_total"))
-            registros.append(estante)
+            registros.append(seccion)
         almacen.save()
-        almacen.estantes.bulk_create(registros)
+        almacen.secciones.bulk_create(registros)
 
 class UnidadListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -69,7 +84,7 @@ class UnidadSerializer(UnidadListSerializer):
     cantidad = serializers.FloatField(required=True)
     class Meta(UnidadListSerializer.Meta):
         model = Unidad
-        fields = ("unidad", "estante", "estado", "codigo", "cantidad")
+        fields = ("unidad", "seccion", "estado", "codigo", "cantidad")
         read_only_fields = ("estado", "codigo", "producto")
 
     @transaction.atomic

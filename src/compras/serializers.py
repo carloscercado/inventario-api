@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from .models import Proveedor, Compra, DetalleCompra
 from django.db import transaction
+from rest_framework.exceptions import ValidationError
+import uuid
 
 class ProveedorSerializer(serializers.ModelSerializer):
     detalle = serializers.HyperlinkedIdentityField(view_name='proveedor-detail', format='html')
@@ -17,30 +19,43 @@ class DetalleCompraSerializer(serializers.ModelSerializer):
         fields = ("producto", "cantidad", "medida", "precio", "total", "cantidad_procesada",
                   "procesado", "faltante_por_procesar")
 
+class DetalleCompraCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DetalleCompra
+        read_only_fields = ("total",)
+        fields = ("producto", "cantidad", "precio", "total", "cantidad_procesada",
+                  "procesado", "faltante_por_procesar")
+
 class CompraSerializer(serializers.ModelSerializer):
     Proveedor = ProveedorSerializer
     detalle = serializers.HyperlinkedIdentityField(view_name='compra-detail', format='html')
     class Meta:
         model = Compra
-        fields = ("codigo", "total", "fecha", "detalle", "procesada",
+        fields = ("id","codigo", "total", "fecha", "detalle", "procesada",
                   "eliminable", "proveedor", "bloqueada",)
-        read_only_fields = ("total",)
+        read_only_fields = ("total","codigo")
 
 class CompraDetalleSerializer(CompraSerializer):
-    detalles = DetalleCompraSerializer(many=True)
+    detalles = DetalleCompraCreateSerializer(many=True)
     class Meta(CompraSerializer.Meta):
-        fields = ("codigo", "total", "fecha", "procesada", "eliminable",
+        fields = ("id","codigo", "total", "fecha", "procesada", "eliminable",
                   "proveedor", "bloqueada","detalles",)
 
     @transaction.atomic
     def create(self, datos):
         detalles = datos.pop("detalles")
-        compra = Compra.objects.create(**datos)
+        codigo = uuid.uuid4().hex
+        compra = Compra.objects.create(**datos, codigo=codigo)
         self.registrar_detalles(compra, detalles)
         return compra
 
     @transaction.atomic
     def update(self, compra, datos):
+        if compra.bloqueada:
+            error = {
+                "detalle": "compra no puede ser modificada"
+            }
+            raise ValidationError(error)
         detalles = datos.pop("detalles")
         for key, value in datos.items():
             setattr(compra, key, value)

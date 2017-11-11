@@ -16,7 +16,7 @@ class Proveedor(models.Model):
       return self.nombre
 
 class Compra(models.Model):
-    codigo = models.CharField(max_length=30, unique=True,
+    codigo = models.CharField(max_length=32, unique=True,
                               help_text="codigo de la compra")
     proveedor = models.ForeignKey(Proveedor, related_name="compras",
                                   help_text="proveedor de la compra",
@@ -45,7 +45,7 @@ class Compra(models.Model):
         return not self.bloqueada
 
     def borrar_detalles(self):
-      DetalleCompra.objects.filter(compra_id=self.id).delete()
+        self.detalles.all().delete()
 
 class DetalleCompra(models.Model):
     compra = models.ForeignKey(Compra, related_name="detalles",

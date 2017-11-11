@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import Estante, Almacen, Unidad
+from .models import Seccion, Almacen, Unidad
 from ubicacion import serializers
 
 
@@ -19,24 +19,29 @@ class AlmacenVista(viewsets.ModelViewSet):
             return serializers.AlmacenSerializer
         return serializers.AlmacenDetalleSerializer
 
-class EstanteVista(viewsets.ModelViewSet):
+class SeccionVista(viewsets.ModelViewSet):
     """
-    list: Lista todos los estantes
-    create: Registra un estante
-    retrieve: Busca un estante
-    partial_update: Modifica parcialmente un estante 
-    update: Modifica un estante
-    delete: Elimina un estante
+    list: Lista todos las secciones
+    create: Registra un seccion
+    retrieve: Busca un seccion
+    partial_update: Modifica parcialmente un seccion
+    update: Modifica un seccion
+    delete: Elimina un seccion
     """
-    queryset = Estante.objects.all()
-    serializer_class = serializers.EstanteSerializer
+    queryset = Seccion.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return serializers.SeccionAlmacenSerializer
+        return serializers.SeccionSerializer
+
 
 class UnidadVista(viewsets.ModelViewSet):
     """
     list: Lista todas las unidades
     create: Registra una unidad
     retrieve: Busca una unidad
-    partial_update: Modifica parcialmente una unidad  
+    partial_update: Modifica parcialmente una unidad
     update: Modifica una unidad
     delete: Elimina una unidad
     """
@@ -50,5 +55,5 @@ class UnidadVista(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Unidad.objects.all()\
-                    .select_related("unidad", "estante")
+                    .select_related("unidad", "seccion")
         return queryset
