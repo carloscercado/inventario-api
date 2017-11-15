@@ -50,6 +50,11 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
+#TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+#NOSE_ARGS = ['--with-html', '--with-spec', '--spec-color', '--with-coverage',
+#            '--cover-html', '--cover-package=../', '--cover-html-dir=reports/cover,',
+#             '--html-file=../pruebas.html']
+
 SWAGGER_SETTINGS = {
     'DOC_EXPANSION': 'list',
     'SUPPORTED_SUBMIT_METHODS': [''],

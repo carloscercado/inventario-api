@@ -53,7 +53,7 @@ class CompraDetalleSerializer(CompraSerializer):
     def update(self, compra, datos):
         if compra.bloqueada:
             error = {
-                "detalle": "compra no puede ser modificada"
+                "compra": "no puede ser modificada, esta bloqueada"
             }
             raise ValidationError(error)
         detalles = datos.pop("detalles")

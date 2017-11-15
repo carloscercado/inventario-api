@@ -1,0 +1,572 @@
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Coverage report</title>
+    <link rel="stylesheet" href="style.css" type="text/css">
+    
+    <script type="text/javascript" src="jquery.min.js"></script>
+    <script type="text/javascript" src="jquery.ba-throttle-debounce.min.js"></script>
+    <script type="text/javascript" src="jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="jquery.hotkeys.js"></script>
+    <script type="text/javascript" src="coverage_html.js"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(coverage.index_ready);
+    </script>
+</head>
+<body class="indexfile">
+
+<div id="header">
+    <div class="content">
+        <h1>Coverage report:
+            <span class="pc_cov">76%</span>
+        </h1>
+
+        <img id="keyboard_icon" src="keybd_closed.png" alt="Show keyboard shortcuts" />
+
+        <form id="filter_container">
+            <input id="filter" type="text" value="" placeholder="filter..." />
+        </form>
+    </div>
+</div>
+
+<div class="help_panel">
+    <img id="panel_icon" src="keybd_open.png" alt="Hide keyboard shortcuts" />
+    <p class="legend">Hot-keys on this page</p>
+    <div>
+    <p class="keyhelp">
+        <span class="key">n</span>
+        <span class="key">s</span>
+        <span class="key">m</span>
+        <span class="key">x</span>
+        
+        <span class="key">c</span> &nbsp; change column sorting
+    </p>
+    </div>
+</div>
+
+<div id="index">
+    <table class="index">
+        <thead>
+            
+            <tr class="tablehead" title="Click to sort">
+                <th class="name left headerSortDown shortkey_n">Module</th>
+                <th class="shortkey_s">statements</th>
+                <th class="shortkey_m">missing</th>
+                <th class="shortkey_x">excluded</th>
+                
+                <th class="right shortkey_c">coverage</th>
+            </tr>
+        </thead>
+        
+        <tfoot>
+            <tr class="total">
+                <td class="name left">Total</td>
+                <td>1083</td>
+                <td>261</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="822 1083">76%</td>
+            </tr>
+        </tfoot>
+        <tbody>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras___init___py.html">compras\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_admin_py.html">compras\admin.py</a></td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 1">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_apps_py.html">compras\apps.py</a></td>
+                <td>3</td>
+                <td>3</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 3">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_migrations_0001_initial_py.html">compras\migrations\0001_initial.py</a></td>
+                <td>8</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="8 8">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_migrations_0002_auto_20171111_0949_py.html">compras\migrations\0002_auto_20171111_0949.py</a></td>
+                <td>5</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="5 5">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_migrations___init___py.html">compras\migrations\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_models_py.html">compras\models.py</a></td>
+                <td>45</td>
+                <td>34</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="11 45">24%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_serializers_py.html">compras\serializers.py</a></td>
+                <td>58</td>
+                <td>9</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="49 58">84%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_tests___init___py.html">compras\tests\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_tests_test_casos_pruebas_py.html">compras\tests\test_casos_pruebas.py</a></td>
+                <td>98</td>
+                <td>35</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="63 98">64%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_tests_utils_casos_pruebas_py.html">compras\tests\utils_casos_pruebas.py</a></td>
+                <td>39</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="39 39">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="compras_views_py.html">compras\views.py</a></td>
+                <td>21</td>
+                <td>3</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="18 21">86%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="inventario___init___py.html">inventario\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="inventario_enrrutador_py.html">inventario\enrrutador.py</a></td>
+                <td>5</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="5 5">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="inventario_exceptions_py.html">inventario\exceptions.py</a></td>
+                <td>7</td>
+                <td>7</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 7">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="inventario_settings_py.html">inventario\settings.py</a></td>
+                <td>25</td>
+                <td>25</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 25">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="inventario_urls_py.html">inventario\urls.py</a></td>
+                <td>21</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="21 21">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="inventario_wsgi_py.html">inventario\wsgi.py</a></td>
+                <td>16</td>
+                <td>16</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 16">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="manage_py.html">manage.py</a></td>
+                <td>13</td>
+                <td>13</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 13">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos___init___py.html">productos\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_admin_py.html">productos\admin.py</a></td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 1">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_apps_py.html">productos\apps.py</a></td>
+                <td>3</td>
+                <td>3</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 3">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_exceptions_py.html">productos\exceptions.py</a></td>
+                <td>9</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="9 9">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_migrations_0001_initial_py.html">productos\migrations\0001_initial.py</a></td>
+                <td>7</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="7 7">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_migrations___init___py.html">productos\migrations\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_models_py.html">productos\models.py</a></td>
+                <td>18</td>
+                <td>18</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 18">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_serializers_py.html">productos\serializers.py</a></td>
+                <td>22</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="22 22">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_tests___init___py.html">productos\tests\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_tests_test_casos_pruebas_py.html">productos\tests\test_casos_pruebas.py</a></td>
+                <td>147</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="147 147">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_tests_utils_casos_pruebas_py.html">productos\tests\utils_casos_pruebas.py</a></td>
+                <td>22</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="22 22">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="productos_views_py.html">productos\views.py</a></td>
+                <td>35</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="35 35">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas___init___py.html">salidas\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas_admin_py.html">salidas\admin.py</a></td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 1">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas_apps_py.html">salidas\apps.py</a></td>
+                <td>3</td>
+                <td>3</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 3">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas_migrations_0001_initial_py.html">salidas\migrations\0001_initial.py</a></td>
+                <td>7</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="7 7">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas_migrations___init___py.html">salidas\migrations\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas_models_py.html">salidas\models.py</a></td>
+                <td>21</td>
+                <td>21</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 21">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas_serializers_py.html">salidas\serializers.py</a></td>
+                <td>46</td>
+                <td>17</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="29 46">63%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas_tests_py.html">salidas\tests.py</a></td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="1 1">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="salidas_views_py.html">salidas\views.py</a></td>
+                <td>15</td>
+                <td>5</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="10 15">67%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion___init___py.html">ubicacion\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_admin_py.html">ubicacion\admin.py</a></td>
+                <td>1</td>
+                <td>1</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 1">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_apps_py.html">ubicacion\apps.py</a></td>
+                <td>3</td>
+                <td>3</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 3">0%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_migrations_0001_initial_py.html">ubicacion\migrations\0001_initial.py</a></td>
+                <td>7</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="7 7">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_migrations_0002_auto_20171111_0815_py.html">ubicacion\migrations\0002_auto_20171111_0815.py</a></td>
+                <td>5</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="5 5">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_migrations_0003_auto_20171111_0828_py.html">ubicacion\migrations\0003_auto_20171111_0828.py</a></td>
+                <td>5</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="5 5">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_migrations___init___py.html">ubicacion\migrations\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_models_py.html">ubicacion\models.py</a></td>
+                <td>38</td>
+                <td>36</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="2 38">5%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_serializers_py.html">ubicacion\serializers.py</a></td>
+                <td>104</td>
+                <td>6</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="98 104">94%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_tests___init___py.html">ubicacion\tests\__init__.py</a></td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="0 0">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_tests_test_casos_pruebas_py.html">ubicacion\tests\test_casos_pruebas.py</a></td>
+                <td>137</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="137 137">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_tests_utils_casos_pruebas_py.html">ubicacion\tests\utils_casos_pruebas.py</a></td>
+                <td>33</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="33 33">100%</td>
+            </tr>
+            
+            <tr class="file">
+                <td class="name left"><a href="ubicacion_views_py.html">ubicacion\views.py</a></td>
+                <td>27</td>
+                <td>0</td>
+                <td>0</td>
+                
+                <td class="right" data-ratio="27 27">100%</td>
+            </tr>
+            
+        </tbody>
+    </table>
+
+    <p id="no_rows">
+        No items found using the specified filter.
+    </p>
+</div>
+
+<div id="footer">
+    <div class="content">
+        <p>
+            <a class="nav" href="https://coverage.readthedocs.io">coverage.py v4.4.2</a>,
+            created at 2017-11-15 07:52
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

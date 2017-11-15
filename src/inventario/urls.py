@@ -19,7 +19,7 @@ router.register(r'secciones', ubi.SeccionVista)
 router.register(r'compras', com.CompraVista)
 router.register(r'proveedores', com.ProveedorVista)
 router.register(r'salidas', sal.SalidaVista)
-router.register(r'clientes', sal.ClienteVista)
+router.register(r'dependencias', sal.DependenciaVista)
 router.register(r'unidades', ubi.UnidadVista)
 
 urlpatterns = [

@@ -1,15 +1,15 @@
 from rest_framework import serializers
-from .models import Cliente, Salida, DetalleVenta
+from .models import Dependencia, Salida, DetalleVenta
 from django.db import transaction
 
-class ClienteSerializer(serializers.ModelSerializer):
-    detalle = serializers.HyperlinkedIdentityField(view_name='cliente-detail', format='html')
+class DependenciaSerializer(serializers.ModelSerializer):
+    detalle = serializers.HyperlinkedIdentityField(view_name='dependencia-detail', format='html')
     class Meta:
-        model = Cliente
+        model = Dependencia
         fields = ("__all__")
 
 class SalidaListSerializer(serializers.ModelSerializer):
-    Cliente = ClienteSerializer
+    Dependencia = DependenciaSerializer
     detalle = serializers.HyperlinkedIdentityField(view_name='salida-detail', format='html')
     class Meta:
         model = Salida
@@ -27,7 +27,7 @@ class SalidaSerializer(SalidaListSerializer):
     detalles = DetalleSalidaSerializer(many=True)
     class Meta(SalidaListSerializer.Meta):
         model = Salida
-        fields = ("cliente", "codigo", "fecha", "total", "detalles")
+        fields = ("dependencia", "codigo", "fecha", "total", "detalles")
 
     @transaction.atomic
     def create(self, datos):

@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from .models import Cliente, Salida
+from .models import Dependencia, Salida
 from salidas import serializers
 
 
@@ -21,20 +21,20 @@ class SalidaVista(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Salida.objects.all()\
-                    .select_related("cliente")\
+                    .select_related("dependencia")\
                     .prefetch_related("detalles")
         return queryset
 
-class ClienteVista(viewsets.ModelViewSet):
+class DependenciaVista(viewsets.ModelViewSet):
     """
-    list: Lista todos los clientes
-    create: Registra un cliente
-    retrieve: Busca un cliente
-    partial_update: Modifica parcialmente un cliente  
-    update: Modifica un cliente
-    delete: Elimina un cliente
+    list: Lista todos las dependencias
+    create: Registra una dependencia
+    retrieve: Busca una dependencia
+    partial_update: Modifica parcialmente una dependencia  
+    update: Modifica una dependencia
+    delete: Elimina una dependencia
     """
-    queryset = Cliente.objects.all()
-    serializer_class = serializers.ClienteSerializer
+    queryset = Dependencia.objects.all()
+    serializer_class = serializers.DependenciaSerializer
 
     #96609745

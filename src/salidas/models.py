@@ -1,13 +1,14 @@
 from django.db import models
 from productos.models import Producto
 
-class Cliente(models.Model):
-    rif = models.CharField(max_length=15, help_text="Rif/CI del cliente")
-    nombre = models.CharField(max_length=30, help_text="Nomrbe del cliente")
-    telefono = models.CharField(max_length=15, help_text="Telefono del cliente",
+class Dependencia(models.Model):
+    nombre = models.CharField(max_length=30, help_text="Nomrbe de la dependencia")
+    telefono = models.CharField(max_length=15, help_text="Telefono de la dependencia",
                                 null=True)
     direccion = models.CharField(max_length=80, null=True,
-                                 help_text="Direccion del cliente")
+                                 help_text="Direccion de la dependencia")
+    descripcion = models.CharField(max_length=80, null=True,
+                                 help_text="Descripcion breve de la dependencia")
 
     def __str__(self):
       return self.nombre
@@ -15,9 +16,9 @@ class Cliente(models.Model):
 class Salida(models.Model):
     codigo = models.CharField(max_length=30, unique=True,
                               help_text="codigo de la salida")
-    cliente = models.ForeignKey(Cliente, related_name="salidas",
+    dependencia = models.ForeignKey(Dependencia, related_name="salidas",
                                   help_text="cliente de la salida",
-                                  on_delete=models.CASCADE)
+                                  on_delete=models.CASCADE, default=0)
     total = models.FloatField(default=0,
                               help_text="Monto total de la salida")
     fecha = models.DateField(help_text="Fecha de la salida")

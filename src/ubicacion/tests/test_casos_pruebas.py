@@ -4,6 +4,12 @@ import pdb
 
 class CasosPruebas(UtilCasosPrueba):
 
+    """
+    ********************
+    ******Ubicacion******
+    ********************
+    """
+
     def test_registrar_almacen(self):
         """
         Prueba el registro de un almacen
@@ -93,11 +99,12 @@ class CasosPruebas(UtilCasosPrueba):
         self.assertEqual(len(respuesta.json()), 2)
 
 
-    """
-    ********************
-    ******Secciones******
-    ********************
-    """
+
+
+
+
+
+
 
     def test_registrar_seccion(self):
         """
@@ -183,11 +190,9 @@ class CasosPruebas(UtilCasosPrueba):
         self.assertEqual(respuesta.json()["volumen"], volumen_esperado)
         self.assertEqual(respuesta.json()["volumen_restante"], volumen_esperado)
 
-    """
-    ********************
-    ******Unidades******
-    ********************
-    """
+
+
+
 
     def test_registrar_unidad(self):
         """

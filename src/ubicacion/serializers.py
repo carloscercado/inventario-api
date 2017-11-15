@@ -121,11 +121,6 @@ class UnidadCreateSerializer(UnidadListSerializer):
 
     def validar_cantidad(self, detalle, cantidad):
         disponible = detalle.faltante_por_procesar
-        if cantidad == disponible:
-            error = {
-                "cantidad": "invalida. No hay productos para procesar"
-            }
-            raise ValidationError(error)
         if cantidad > disponible:
             error = {
                 "cantidad": "invalida. Es mayor a la disponible ["+str(disponible)+"]"

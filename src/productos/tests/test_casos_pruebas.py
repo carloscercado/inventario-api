@@ -150,11 +150,11 @@ class CasosPruebas(UtilCasosPrueba):
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(respuesta.json()["cantidad"], 1)
 
-    """
-    ********************
-    ******Categoria******
-    ********************
-    """
+
+
+
+
+
 
     def test_registrar_categoria(self):
         """
