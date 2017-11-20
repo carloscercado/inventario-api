@@ -4,6 +4,7 @@ from productos import views as pro
 from ubicacion import views as ubi
 from salidas import views as sal
 from compras import views as com
+from personas import views as per
 from .enrrutador import RaizRouter
 import debug_toolbar
 from rest_framework_swagger.views import get_swagger_view
@@ -21,6 +22,7 @@ router.register(r'proveedores', com.ProveedorVista)
 router.register(r'salidas', sal.SalidaVista)
 router.register(r'dependencias', sal.DependenciaVista)
 router.register(r'unidades', ubi.UnidadVista)
+router.register(r'usuarios', per.UsuarioVista)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

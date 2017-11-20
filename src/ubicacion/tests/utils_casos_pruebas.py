@@ -1,9 +1,9 @@
-from rest_framework.test import APITestCase
+from inventario.api_casos_pruebas import APICasoPrueba
 from ubicacion.models import Almacen, Seccion, Unidad
 from compras.tests import utils_casos_pruebas
 from compras.models import Compra
 
-class UtilCasosPrueba(APITestCase):
+class UtilCasosPrueba(APICasoPrueba):
 
     def registrar_almacen(self):
         almacen = Almacen(nombre="mi almacen", direccion="mi direccion",
@@ -23,13 +23,14 @@ class UtilCasosPrueba(APITestCase):
         seccion.save()
         return seccion
 
-    def registrar_compra_con_detalles(self, codigo=None, categoria_nombre="mi categoria"):
+    def registrar_compra_con_detalles(self, codigo=None, categoria_nombre="mi categoria", usuario=None):
         clase = utils_casos_pruebas.UtilCasosPrueba()
-        return clase.registrar_compra_con_detalles(codigo, categoria_nombre)
+        usuario = self.usuario if usuario is None else usuario
+        return clase.registrar_compra_con_detalles(codigo, categoria_nombre=categoria_nombre, usuario=usuario)
 
     def registrar_unidad(self, longi, ancho, alto, codigo=None, categoria_nombre="Mi categoria"):
         codigo = "0001" if codigo is None else codigo
-        compra = self.registrar_compra_con_detalles(codigo, categoria_nombre)
+        compra = self.registrar_compra_con_detalles(codigo, categoria_nombre=categoria_nombre)
         detalle1 = compra.detalles.all()[0]
         seccion = self.registrar_seccion()
         unidad = Unidad(altura=alto, ancho=ancho, longitud=longi,
@@ -44,3 +45,4 @@ class UtilCasosPrueba(APITestCase):
         Almacen.objects.all().delete()
         Compra.objects.all().delete()
         Unidad.objects.all().delete()
+        super().tearDown()

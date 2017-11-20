@@ -1,6 +1,7 @@
 from django.db import models
 from productos.models import Producto
 from decimal import Decimal
+from personas.models import Persona
 
 class Proveedor(models.Model):
     rif = models.CharField(max_length=15, help_text="rif del proveedor")
@@ -25,6 +26,8 @@ class Compra(models.Model):
                                 default=Decimal(0), null=True,
                                 help_text="Monto total de la compra")
     fecha = models.DateField(help_text="Fecha de la compra")
+    usuario = models.ForeignKey(Persona, related_name="compras",
+                                 help_text="usuario que registro la compra")
 
     @property
     def bloqueada(self):

@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import list_route
 from .models import Proveedor, Compra, DetalleCompra
 from compras import serializers
+from personas.models import Persona
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
@@ -39,6 +40,11 @@ class CompraVista(viewsets.ModelViewSet):
                     .prefetch_related("detalles")
         return queryset
 
+    def perform_create(self, serializer):
+        serializer_class = serializers.CompraDetalleSerializer
+        user = Persona.objects.filter(user=self.request.user).get()
+        serializer.save(usuario=user)
+
     @list_route(methods=['get'], url_path=r'codigo/(?P<codigo>[^/]+)')
     def por_plan_de_cuenta(self, request, codigo):
         data = self.get_queryset().filter(codigo=codigo).first()
@@ -52,7 +58,7 @@ class ProveedorVista(viewsets.ModelViewSet):
     list: Lista todos los proveedores
     create: Registra un proveedor
     retrieve: Busca un proveedor
-    partial_update: Modifica parcialmente un proveedor  
+    partial_update: Modifica parcialmente un proveedor
     update: Modifica un proveedor
     delete: Elimina un proveedor
     """

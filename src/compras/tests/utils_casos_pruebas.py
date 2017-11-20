@@ -1,9 +1,9 @@
-from rest_framework.test import APITestCase
+from inventario.api_casos_pruebas import APICasoPrueba
 from compras.models import Proveedor, Compra, DetalleCompra
 from productos.models import Categoria, Producto
 import datetime
 
-class UtilCasosPrueba(APITestCase):
+class UtilCasosPrueba(APICasoPrueba):
 
     def registrar_proveedor(self):
         proveedor = Proveedor(rif="23923164", nombre="Paulo milanes",
@@ -25,20 +25,27 @@ class UtilCasosPrueba(APITestCase):
         if codigo is None:
             codigo = "000001"
         fecha = datetime.datetime.now()
+
         compra = Compra(codigo=codigo, fecha=fecha,
-                        proveedor=self.registrar_proveedor())
+                        proveedor=self.registrar_proveedor(),
+                        usuario=self.usuario)
         compra.save()
         return compra
 
-    def registrar_compra_con_detalles(self, codigo=None, categoria_nombre="mi categoria"):
+    def registrar_compra_con_detalles(self, codigo=None, usuario=None, producto=None, cantidad=2, categoria_nombre="mi categoria"):
         if codigo is None:
             codigo = "000001"
         fecha = datetime.datetime.now()
+
+        if usuario is None:
+            usuario = self.usuario
         compra = Compra(codigo=codigo, fecha=fecha,
-                        proveedor=self.registrar_proveedor())
+                        proveedor=self.registrar_proveedor(),
+                        usuario=usuario)
         compra.save()
-        producto = self.registrar_producto(categoria_nombre=categoria_nombre)
-        detalle = DetalleCompra(fecha=compra.fecha, cantidad=2, producto=producto,
+        if producto is None:
+            producto = self.registrar_producto(categoria_nombre=categoria_nombre)
+        detalle = DetalleCompra(fecha=compra.fecha, cantidad=cantidad, producto=producto,
                                 precio=1000, compra=compra)
         detalle2 = DetalleCompra(fecha=compra.fecha, cantidad=4, producto=producto,
                                  precio=500, compra=compra)
@@ -49,3 +56,4 @@ class UtilCasosPrueba(APITestCase):
     def tearDown(self):
         Proveedor.objects.all().delete()
         Compra.objects.all().delete()
+        super().tearDown()

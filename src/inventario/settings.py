@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'ubicacion.apps.UbicacionConfig',
     'compras.apps.ComprasConfig',
     'salidas.apps.SalidasConfig',
+    'personas.apps.PersonasConfig',
     'debug_toolbar',
     'rest_framework_swagger',
 ]
@@ -89,7 +90,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'inventario.wsgi.application'
 
-
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 

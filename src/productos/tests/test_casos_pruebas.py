@@ -130,7 +130,7 @@ class CasosPruebas(UtilCasosPrueba):
 
 
         compra = self.registrar_compra_con_detalles(categoria_nombre="Otra categoria")
-        detalle1 = compra.detalles.all()[0]
+        detalle1 = compra.detalles.all().first()
         detalle1.producto = producto
         detalle1.save()
         clase = utils_casos_pruebas.UtilCasosPrueba()

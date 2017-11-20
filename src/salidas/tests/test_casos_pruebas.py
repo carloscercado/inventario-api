@@ -1,77 +1,76 @@
 from .utils_casos_pruebas import UtilCasosPrueba
-from compras.models import Proveedor, Compra
+from salidas.models import Dependencia, Salida
 import uuid
-from ubicacion.tests import utils_casos_pruebas
-import productos
+from productos.models import Producto
+from compras.tests import utils_casos_pruebas as compras
+from ubicacion.tests import utils_casos_pruebas as ubicacion
 import pdb
 
 class CasosPruebas(UtilCasosPrueba):
 
     """
     ********************
-    ******Compras******
+    ******Salidas******
     ********************
     """
 
-    def test_registrar_proveedor(self):
+    def test_registrar_dependencia(self):
         """
-        Prueba el registro de un proveedor
+        Prueba el registro de un dependencia
         """
         payload = {
-            "nombre": "Mi proveedor",
+            "nombre": "Mi dependencia",
             "direccion": "mi direccion",
-            "rif": "23923164",
             "telefono": "0293144726"
         }
-        respuesta = self.client.post("/proveedores", payload, format="json")
+        respuesta = self.client.post("/dependencias", payload, format="json")
         self.assertEqual(respuesta.status_code, 201)
 
 
-    def test_modificar_proveedor(self):
+    def test_modificar_dependencia(self):
         """
-        Prueba modificar un proveedor
+        Prueba modificar un dependencia
         """
-        proveedor = self.registrar_proveedor()
+        dependencia = self.registrar_dependencia()
         payload = {
-            "nombre": "Mi proveedor 2",
+            "nombre": "Mi dependencia 2",
             "direccion": "mi direccion",
-            "rif": "23923164",
             "telefono": "0293144726"
         }
-        _id = str(proveedor.id)
-        respuesta = self.client.put("/proveedores/" + _id, payload, format="json")
+        _id = str(dependencia.id)
+        respuesta = self.client.put("/dependencias/" + _id, payload, format="json")
         self.assertEqual(respuesta.status_code, 200)
-        self.assertEqual(respuesta.json()["id"], proveedor.id)
-        self.assertNotEqual(respuesta.json()["nombre"], proveedor.nombre)
+        self.assertEqual(respuesta.json()["id"], dependencia.id)
+        self.assertNotEqual(respuesta.json()["nombre"], dependencia.nombre)
 
-    def test_eliminar_proveedor(self):
+    def test_eliminar_dependencia(self):
         """
-        Prueba eliminar un proveedor
+        Prueba eliminar un dependencia
         """
-        proveedor = self.registrar_proveedor()
-        _id = str(proveedor.id)
-        respuesta = self.client.delete("/proveedores/" + _id)
+        dependencia = self.registrar_dependencia()
+        _id = str(dependencia.id)
+        respuesta = self.client.delete("/dependencias/" + _id)
         self.assertEqual(respuesta.status_code, 204)
-        self.assertEqual(Proveedor.objects.filter(id=proveedor.id).first(), None)
+        self.assertEqual(Dependencia.objects.filter(id=dependencia.id).first(), None)
 
-    def test_buscar_proveedor(self):
+    def test_buscar_dependencia(self):
         """
-        Prueba buscar un proveedor
+        Prueba buscar un dependencia
         """
-        proveedor = self.registrar_proveedor()
-        _id = str(proveedor.id)
-        respuesta = self.client.get("/proveedores/" + _id)
+        dependencia = self.registrar_dependencia()
+        _id = str(dependencia.id)
+        respuesta = self.client.get("/dependencias/" + _id)
         self.assertEqual(respuesta.status_code, 200)
-        self.assertEqual(respuesta.json()["id"], proveedor.id)
+        self.assertEqual(respuesta.json()["id"], dependencia.id)
 
-    def test_listar_proveedor(self):
+    def test_listar_dependencia(self):
         """
-        Prueba listar proveedores
+        Prueba listar dependencias
         """
-        self.registrar_proveedor()
-        self.registrar_proveedor()
+        self.registrar_dependencia()
+        self.registrar_dependencia()
 
-        respuesta = self.client.get("/proveedores")
+        respuesta = self.client.get("/dependencias")
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(len(respuesta.json()), 2)
 
@@ -79,235 +78,165 @@ class CasosPruebas(UtilCasosPrueba):
 
 
 
-
-
-    def test_registrar_compra_vacia(self):
+    def test_registrar_salida_vacia(self):
         """
-        Prueba el registro de una compra vacia
+        Prueba registrar una salida sin productos
         """
 
-        proveedor = self.registrar_proveedor()
+        dependencia = self.registrar_dependencia()
         payload = {
             "fecha": "2017-01-02",
-            "proveedor": proveedor.id,
+            "dependencia": dependencia.id,
             "detalles": []
         }
-        respuesta = self.client.post("/compras", payload, format="json")
+        respuesta = self.client.post("/salidas", payload, format="json")
         self.assertEqual(respuesta.status_code, 201)
         self.assertEqual(len(respuesta.json().get("codigo")), 32)
+        self.assertEqual(len(respuesta.json().get("detalles")), 0)
 
-    def test_registrar_compra(self):
+    def test_registrar_salida_producto_cero(self):
         """
-        Prueba el registro de una compra
+        Prueba registrar una salida usando un producto escaso
         """
 
-        proveedor = self.registrar_proveedor()
-        producto = self.registrar_producto()
+        dependencia = self.registrar_dependencia()
+
+        clase = compras.UtilCasosPrueba()
+        producto = clase.registrar_producto()
 
         payload = {
             "fecha": "2017-01-02",
-            "proveedor": proveedor.id,
+            "dependencia": dependencia.id,
             "detalles": [
                 {
                     "producto": producto.id,
-                    "precio": 1000,
-                    "cantidad": 5
+                    "cantidad": 1
                 }
             ]
         }
-        respuesta = self.client.post("/compras", payload, format="json")
+        respuesta = self.client.post("/salidas", payload, format="json")
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertNotEqual(respuesta.json().get("detalles")[0], None)
+
+    def test_registrar_salida(self):
+        """
+        Prueba registrar una salida
+        """
+
+        clase = compras.UtilCasosPrueba()
+
+        producto = clase.registrar_producto()
+
+        compra = clase.registrar_compra_con_detalles(producto=producto, usuario=self.usuario)
+        detalle1 = compra.detalles.all().first()
+
+        ubi = ubicacion.UtilCasosPrueba()
+
+        seccion = ubi.registrar_seccion()
+        payload = {
+            "unidad": detalle1.id,
+            "seccion": seccion.id,
+            "longitud": 500,
+            "altura": 500,
+            "ancho": 500,
+            "cantidad": 2
+        }
+        respuesta = self.client.post("/unidades", payload, format="json")
         self.assertEqual(respuesta.status_code, 201)
-        self.assertEqual(respuesta.json().get("bloqueada"), False)
-        self.assertEqual(respuesta.json().get("procesada"), False)
-        self.assertEqual(respuesta.json().get("eliminable"), True)
 
+        dependencia = self.registrar_dependencia()
 
-    def test_modificar_compra(self):
-        """
-        Prueba modificar una compra
-        """
-        compra = self.registrar_compra()
-        self.assertEqual(len(compra.detalles.all()), 0)
-
-        producto = self.registrar_producto()
         payload = {
             "fecha": "2017-01-02",
-            "proveedor": compra.proveedor.id,
+            "dependencia": dependencia.id,
             "detalles": [
                 {
                     "producto": producto.id,
-                    "precio": 1000,
-                    "cantidad": 5
-                },
-                {
-                    "producto": producto.id,
-                    "precio": 500,
-                    "cantidad": 5
+                    "cantidad": 2
                 }
             ]
         }
-        _id = str(compra.id)
-
-        respuesta = self.client.post("/compras", payload, format="json")
+        respuesta = self.client.post("/salidas", payload, format="json")
         self.assertEqual(respuesta.status_code, 201)
-        self.assertEqual(len(respuesta.json()["detalles"]), 2)
 
-    def test_eliminar_compra(self):
-        """
-        Prueba eliminar una compra
-        """
-        compra = self.registrar_compra_con_detalles()
-        _id = str(compra.id)
-        respuesta = self.client.delete("/compras/" + _id)
-        self.assertEqual(respuesta.status_code, 204)
-        self.assertEqual(Compra.objects.filter(id=compra.id).first(), None)
+        producto = Producto.objects.filter(id=producto.id).get()
+        self.assertEqual(producto.cantidad, 0)
 
-    def test_buscar_compra(self):
+    def test_registrar_salida_mayor_disponible(self):
         """
-        Prueba buscar un compra
-        """
-        compra = self.registrar_compra_con_detalles()
-        _id = str(compra.id)
-        respuesta = self.client.get("/compras/" + _id)
-        self.assertEqual(respuesta.status_code, 200)
-        self.assertEqual(respuesta.json()["id"], compra.id)
-        self.assertEqual(len(respuesta.json().get("detalles")), 2)
-
-    def test_listar_compra(self):
-        """
-        Prueba listar compras
-        """
-        self.registrar_compra_con_detalles(codigo="0000001", categoria_nombre="Otra categoria")
-        self.registrar_compra_con_detalles(codigo="0000002")
-
-        respuesta = self.client.get("/compras")
-        self.assertEqual(respuesta.status_code, 200)
-        self.assertEqual(len(respuesta.json()), 2)
-
-    def test_procesar_compra(self):
-        """
-        Prueba el procesamiento de una compra
+        Prueba registrar una salida de un producto mayor al disponible
         """
 
-        compra = self.registrar_compra_con_detalles(categoria_nombre="Otra categoria")
+        clase = compras.UtilCasosPrueba()
+
+        producto = clase.registrar_producto()
+
+        compra = clase.registrar_compra_con_detalles(cantidad=15, producto=producto, usuario=self.usuario)
         detalle1 = compra.detalles.all().first()
-        detalle2 = compra.detalles.all().last()
-        _id = str(detalle1.producto.id)
-        clase = utils_casos_pruebas.UtilCasosPrueba()
-        seccion = clase.registrar_seccion()
+
+        ubi = ubicacion.UtilCasosPrueba()
+
+        seccion = ubi.registrar_seccion()
         payload = {
             "unidad": detalle1.id,
             "seccion": seccion.id,
-            "longitud": 200,
-            "altura": 200,
-            "ancho": 200,
-            "cantidad": detalle1.cantidad
+            "longitud": 20,
+            "altura": 20,
+            "ancho": 20,
+            "cantidad": 15
         }
         respuesta = self.client.post("/unidades", payload, format="json")
         self.assertEqual(respuesta.status_code, 201)
+
+        dependencia = self.registrar_dependencia()
 
         payload = {
-            "unidad": detalle2.id,
-            "seccion": seccion.id,
-            "longitud": 200,
-            "altura": 200,
-            "ancho": 200,
-            "cantidad": detalle2.cantidad
+            "fecha": "2017-01-02",
+            "dependencia": dependencia.id,
+            "detalles": [
+                {
+                    "producto": producto.id,
+                    "cantidad": 16
+                }
+            ]
         }
-        respuesta = self.client.post("/unidades", payload, format="json")
-        self.assertEqual(respuesta.status_code, 201)
-
-
-        compra_id = str(compra.id)
-
-        respuesta = self.client.get("/compras/" + compra_id)
-        self.assertEqual(respuesta.status_code, 200)
-        self.assertEqual(respuesta.json().get("bloqueada"), True)
-        self.assertEqual(respuesta.json().get("procesada"), True)
-        self.assertEqual(respuesta.json().get("eliminable"), False)
-
-    def test_bloquear_compra(self):
-        """
-        Prueba si se bloquea una compra cuando debe
-        """
-
-        compra = self.registrar_compra_con_detalles(categoria_nombre="Otra categoria")
-        detalle1 = compra.detalles.all().first()
-        _id = str(detalle1.producto.id)
-        clase = utils_casos_pruebas.UtilCasosPrueba()
-        seccion = clase.registrar_seccion()
-        payload = {
-            "unidad": detalle1.id,
-            "seccion": seccion.id,
-            "longitud": 200,
-            "altura": 200,
-            "ancho": 200,
-            "cantidad": detalle1.cantidad
-        }
-        respuesta = self.client.post("/unidades", payload, format="json")
-        self.assertEqual(respuesta.status_code, 201)
-
-        compra_id = str(compra.id)
-
-        respuesta = self.client.get("/compras/" + compra_id)
-        self.assertEqual(respuesta.status_code, 200)
-        self.assertEqual(respuesta.json().get("bloqueada"), True)
-
-    def test_eliminar_compra_bloqueada(self):
-        """
-        Prueba eliminar una compra bloqueada
-        """
-
-        compra = self.registrar_compra_con_detalles(categoria_nombre="Otra categoria")
-        detalle1 = compra.detalles.all().first()
-        _id = str(detalle1.producto.id)
-        clase = utils_casos_pruebas.UtilCasosPrueba()
-        seccion = clase.registrar_seccion()
-        payload = {
-            "unidad": detalle1.id,
-            "seccion": seccion.id,
-            "longitud": 200,
-            "altura": 200,
-            "ancho": 200,
-            "cantidad": detalle1.cantidad
-        }
-        respuesta = self.client.post("/unidades", payload, format="json")
-        self.assertEqual(respuesta.status_code, 201)
-
-        compra_id = str(compra.id)
-
-        respuesta = self.client.delete("/compras/" + compra_id)
+        respuesta = self.client.post("/salidas", payload, format="json")
         self.assertEqual(respuesta.status_code, 400)
 
-    def test_modificar_compra_bloqueada(self):
-        """
-        Prueba modificar una compra bloqueada
-        """
+        producto = Producto.objects.filter(id=producto.id).get()
+        self.assertEqual(producto.cantidad, 15)
 
-        compra = self.registrar_compra_con_detalles(categoria_nombre="Otra categoria")
-        detalle1 = compra.detalles.all().first()
-        _id = str(detalle1.producto.id)
-        clase = utils_casos_pruebas.UtilCasosPrueba()
-        seccion = clase.registrar_seccion()
-        payload = {
-            "unidad": detalle1.id,
-            "seccion": seccion.id,
-            "longitud": 200,
-            "altura": 200,
-            "ancho": 200,
-            "cantidad": detalle1.cantidad
-        }
-        respuesta = self.client.post("/unidades", payload, format="json")
-        self.assertEqual(respuesta.status_code, 201)
+    def test_listar_salidas(self):
 
-        compra_id = str(compra.id)
+        self.test_registrar_salida()
+
+        respuesta = self.client.get("/salidas", format="json")
+        self.assertEqual(len(respuesta.json()), 1)
+        self.assertEqual(respuesta.status_code, 200)
+
+    def test_buscar_salidas(self):
+
+        self.test_registrar_salida()
+
+        respuesta = self.client.get("/salidas/1", format="json")
+        self.assertEqual(len(respuesta.json().get("detalles")), 1)
+        self.assertEqual(respuesta.status_code, 200)
+
+    def test_eliminar_salidas(self):
+
+        self.test_registrar_salida()
+
+        respuesta = self.client.delete("/salidas/1")
+        self.assertEqual(respuesta.status_code, 400)
+
+    def test_modificar_salidas(self):
+
+        self.test_registrar_salida()
 
         payload = {
             "fecha": "2017-01-02",
-            "proveedor": compra.proveedor.id,
-            "detalles": []
         }
 
-        respuesta = self.client.put("/compras/" + compra_id, payload, format="json")
+        respuesta = self.client.put("/salidas/1", payload, format="json")
         self.assertEqual(respuesta.status_code, 400)
 
