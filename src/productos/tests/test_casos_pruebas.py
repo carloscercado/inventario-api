@@ -1,8 +1,7 @@
 from .utils_casos_pruebas import UtilCasosPrueba
 from productos.models import Producto, Categoria
 from ubicacion.tests import utils_casos_pruebas
-import pdb
-
+import uuid
 class CasosPruebas(UtilCasosPrueba):
 
     """
@@ -29,7 +28,7 @@ class CasosPruebas(UtilCasosPrueba):
         """
         categoria = self.registrar_categoria("mi categoria")
         producto = Producto(nombre="Mi producto", medida=Producto.KG,
-                            categoria=categoria)
+                            categoria=categoria, codigo=uuid.uuid4())
         producto.save()
         payload = {
             "nombre": "Mi producto 2",
@@ -47,7 +46,8 @@ class CasosPruebas(UtilCasosPrueba):
         Prueba eliminar un producto
         """
         producto = Producto(nombre="Mi producto", medida=Producto.KG,
-                            categoria=self.registrar_categoria("mi categoria"))
+                            categoria=self.registrar_categoria("mi categoria"),
+                            codigo=uuid.uuid4())
         producto.save()
         _id = str(producto.id)
         respuesta = self.client.delete("/productos/" + _id)
@@ -59,7 +59,8 @@ class CasosPruebas(UtilCasosPrueba):
         Prueba buscar un producto
         """
         producto = Producto(nombre="Mi producto", medida=Producto.KG,
-                            categoria=self.registrar_categoria("mi categoria"))
+                            categoria=self.registrar_categoria("mi categoria"),
+                            codigo=uuid.uuid4())
         producto.save()
         _id = str(producto.id)
         respuesta = self.client.get("/productos/" + _id)
@@ -71,10 +72,12 @@ class CasosPruebas(UtilCasosPrueba):
         Prueba listar un producto
         """
         producto = Producto(nombre="Mi producto", medida=Producto.KG,
-                            categoria=self.registrar_categoria("mi categoria"))
+                            categoria=self.registrar_categoria("mi categoria"),
+                            codigo=uuid.uuid4())
         producto.save()
         producto = Producto(nombre="Mi producto 2", medida=Producto.KG,
-                            categoria=self.registrar_categoria("mi categoria 2"))
+                            categoria=self.registrar_categoria("mi categoria 2"),
+                            codigo=uuid.uuid4())
         producto.save()
         respuesta = self.client.get("/productos")
         self.assertEqual(respuesta.status_code, 200)
@@ -121,7 +124,8 @@ class CasosPruebas(UtilCasosPrueba):
         Prueba buscar un producto y su cantidad
         """
         producto = Producto(nombre="Mi producto", medida=Producto.KG,
-                            categoria=self.registrar_categoria("mi categoria"))
+                            categoria=self.registrar_categoria("mi categoria"),
+                            codigo=uuid.uuid4())
         producto.save()
         _id = str(producto.id)
         respuesta = self.client.get("/productos/" + _id)
@@ -149,9 +153,6 @@ class CasosPruebas(UtilCasosPrueba):
         respuesta = self.client.get("/productos/" + _id)
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(respuesta.json()["cantidad"], 1)
-
-
-
 
 
 

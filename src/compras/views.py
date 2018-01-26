@@ -41,9 +41,7 @@ class CompraVista(viewsets.ModelViewSet):
         return queryset
 
     def perform_create(self, serializer):
-        serializer_class = serializers.CompraDetalleSerializer
-        user = Persona.objects.filter(user=self.request.user).get()
-        serializer.save(usuario=user)
+        serializer.save(usuario=self.request.user.persona)
 
     @list_route(methods=['get'], url_path=r'codigo/(?P<codigo>[^/]+)')
     def por_plan_de_cuenta(self, request, codigo):

@@ -225,18 +225,23 @@ class CasosPruebas(UtilCasosPrueba):
     def test_eliminar_salidas(self):
 
         self.test_registrar_salida()
+        respuesta = self.client.get("/salidas")
+        primera = respuesta.json()[0]
 
-        respuesta = self.client.delete("/salidas/1")
+        respuesta = self.client.delete("/salidas/" + str(primera.get("id")))
         self.assertEqual(respuesta.status_code, 400)
 
     def test_modificar_salidas(self):
 
         self.test_registrar_salida()
 
+        respuesta = self.client.get("/salidas")
+        primera = respuesta.json()[0]
+
         payload = {
             "fecha": "2017-01-02",
         }
 
-        respuesta = self.client.put("/salidas/1", payload, format="json")
+        respuesta = self.client.put("/salidas/" + str(primera.get("id")), payload, format="json")
         self.assertEqual(respuesta.status_code, 400)
 

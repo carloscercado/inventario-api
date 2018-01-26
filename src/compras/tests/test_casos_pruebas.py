@@ -77,10 +77,6 @@ class CasosPruebas(UtilCasosPrueba):
 
 
 
-
-
-
-
     def test_registrar_compra_vacia(self):
         """
         Prueba el registro de una compra vacia

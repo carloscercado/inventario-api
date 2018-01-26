@@ -2,12 +2,25 @@ from inventario.api_casos_pruebas import APICasoPrueba
 from ubicacion.models import Almacen, Seccion, Unidad
 from compras.tests import utils_casos_pruebas
 from compras.models import Compra
+from django.contrib.auth.models import User
+from personas.models import Persona
+import uuid
 
 class UtilCasosPrueba(APICasoPrueba):
 
+    def setUp(self):
+        user = User(username="admin", email="admin@admin.admin")
+        user.set_password("admin")
+        user.save()
+        self.usuario = Persona.objects.create(user=user, nombre="Carlos",
+                                              apellido="Cercado", direccion="tacal",
+                                              telefono="034343", pregunta="abc",
+                                              respuesta="abc", cargo="USER")
+        self.client.credentials(HTTP_AUTHORIZATION='Basic YWRtaW5AYWRtaW4uYWRtaW46YWRtaW4=')
+
     def registrar_almacen(self):
         almacen = Almacen(nombre="mi almacen", direccion="mi direccion",
-                          telefono="02924333323", eliminable=True)
+                          telefono="02924333323", eliminable=True, codigo=uuid.uuid4())
         almacen.save()
         return almacen
 
@@ -29,7 +42,7 @@ class UtilCasosPrueba(APICasoPrueba):
         return clase.registrar_compra_con_detalles(codigo, categoria_nombre=categoria_nombre, usuario=usuario)
 
     def registrar_unidad(self, longi, ancho, alto, codigo=None, categoria_nombre="Mi categoria"):
-        codigo = "0001" if codigo is None else codigo
+        codigo = uuid.uuid4() if codigo is None else codigo
         compra = self.registrar_compra_con_detalles(codigo, categoria_nombre=categoria_nombre)
         detalle1 = compra.detalles.all()[0]
         seccion = self.registrar_seccion()
@@ -45,4 +58,5 @@ class UtilCasosPrueba(APICasoPrueba):
         Almacen.objects.all().delete()
         Compra.objects.all().delete()
         Unidad.objects.all().delete()
+        User.objects.all().delete()
         super().tearDown()

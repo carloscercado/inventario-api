@@ -17,19 +17,16 @@ class SalidaVista(viewsets.ModelViewSet):
     queryset = Salida.objects.all()
 
     def destroy(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        instance = self.get_queryset().filter(id=pk).get()
+        instance = self.get_object()
         if not instance.eliminable:
             error = {
                 "salida": "no puede ser eliminada"
             }
             raise ValidationError(error)
         super().destroy(request, *args, **kwargs)
-        print("destroy aqui")
 
     def update(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        instance = self.get_queryset().filter(id=pk).get()
+        instance = self.get_object()
         if not instance.eliminable:
             error = {
                 "salida": "no puede ser modificada"
@@ -38,9 +35,7 @@ class SalidaVista(viewsets.ModelViewSet):
         super().update(request, *args, **kwargs)
 
     def perform_create(self, serializer):
-        serializer_class = serializers.SalidaSerializer
-        user = Persona.objects.filter(user=self.request.user).get()
-        serializer.save(usuario=user)
+        serializer.save(usuario=self.request.user.persona)
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -64,5 +59,3 @@ class DependenciaVista(viewsets.ModelViewSet):
     """
     queryset = Dependencia.objects.all()
     serializer_class = serializers.DependenciaSerializer
-
-    #96609745

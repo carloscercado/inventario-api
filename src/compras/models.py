@@ -17,7 +17,7 @@ class Proveedor(models.Model):
       return self.nombre
 
 class Compra(models.Model):
-    codigo = models.CharField(max_length=32, unique=True,
+    codigo = models.CharField(max_length=64, unique=True,
                               help_text="codigo de la compra")
     proveedor = models.ForeignKey(Proveedor, related_name="compras",
                                   help_text="proveedor de la compra",
@@ -27,7 +27,8 @@ class Compra(models.Model):
                                 help_text="Monto total de la compra")
     fecha = models.DateField(help_text="Fecha de la compra")
     usuario = models.ForeignKey(Persona, related_name="compras",
-                                 help_text="usuario que registro la compra")
+                                 help_text="usuario que registro la compra",
+                                 on_delete=models.CASCADE)
 
     @property
     def bloqueada(self):

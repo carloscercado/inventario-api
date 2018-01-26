@@ -18,6 +18,8 @@ ALLOWED_HOSTS = []
 
 INTERNAL_IPS = ('127.0.0.1',)
 
+AUTHENTICATION_BACKENDS = ['personas.auth.AuthBackend']
+
 STATIC_ROOT = "/"
 
 # Application definition
@@ -31,11 +33,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'productos.apps.ProductosConfig',
-    'ubicacion.apps.UbicacionConfig',
-    'compras.apps.ComprasConfig',
-    'salidas.apps.SalidasConfig',
-    'personas.apps.PersonasConfig',
+    'productos',
+    'ubicacion',
+    'compras',
+    'salidas',
+    'personas',
     'debug_toolbar',
     'rest_framework_swagger',
 ]

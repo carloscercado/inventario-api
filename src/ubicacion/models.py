@@ -3,6 +3,7 @@ from compras.models import DetalleCompra
 from productos.models import Producto
 
 class Almacen(models.Model):
+    codigo = models.CharField(max_length=64, help_text="codigo del almacen", unique=True)
     nombre = models.CharField(max_length=30, help_text="nombre del almacen")
     direccion = models.CharField(max_length=60, help_text="direccion del almacen")
     telefono = models.CharField(null=True, max_length=15,
@@ -37,11 +38,15 @@ class Seccion(models.Model):
     def __str__(self):
       return self.nombre
 
+    class Meta:
+        unique_together = ('almacen', 'nombre',)
+
 class Unidad(models.Model):
     unidad = models.ForeignKey(DetalleCompra, related_name="unidades",
                                help_text="producto a ubicar",
                                on_delete=models.CASCADE)
-    codigo = models.CharField(max_length=32, help_text="codigo unico de la unidad")
+    codigo = models.CharField(max_length=64, unique=True,
+                              help_text="codigo unico de la unidad")
     estado = models.BooleanField(default=True, help_text="Disponible/Usado")
     seccion = models.ForeignKey(Seccion, on_delete=models.CASCADE,
                                 help_text="Estante donde se ubicará la unidad",

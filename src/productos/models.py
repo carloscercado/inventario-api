@@ -2,6 +2,7 @@ from django.db import models
 from decimal import Decimal
 
 class Categoria(models.Model):
+    codigo = models.CharField(max_length=64, help_text="codigo de la categoria", unique=True)
     nombre = models.CharField(unique=True, max_length=30, help_text="nombre de categoria")
     eliminable = models.BooleanField(default=True)
 
@@ -19,6 +20,7 @@ class Producto(models.Model):
         (UNI, UNI),
         (MTR, MTR)
         )
+    codigo = models.CharField(max_length=64, help_text="codigo del producto", unique=True)
     nombre = models.CharField(max_length=30, help_text="nombre del producto")
     categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT,
                                   help_text="Categoria del producto",
