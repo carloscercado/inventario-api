@@ -17,11 +17,25 @@ class CasosPruebas(UtilCasosPrueba):
         payload = {
             "nombre": "Mi almacen",
             "direccion": "mi direccion",
-            "telefono": "02934333333",
+            "telefono": "293-4164454",
             "secciones": []
         }
         respuesta = self.client.post("/almacenes", payload, format="json")
         self.assertEqual(respuesta.status_code, 201)
+
+    def test_registrar_almacen_con_telefono_incorrecto(self):
+        """
+        Prueba el registro de un almacen con formato de telefono incorrecto
+        """
+        payload = {
+            "nombre": "Mi almacen",
+            "direccion": "mi direccion",
+            "telefono": "293344164454",
+            "secciones": []
+        }
+        respuesta = self.client.post("/almacenes", payload, format="json")
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertNotEqual(respuesta.json().get("telefono"), None)
 
     def test_registrar_almacen_con_seccion(self):
         """
@@ -30,7 +44,7 @@ class CasosPruebas(UtilCasosPrueba):
         payload = {
             "nombre": "Mi almacen",
             "direccion": "mi direccion",
-            "telefono": "02934333333",
+            "telefono": "293-4164454",
             "secciones": [
                 {
                     "nombre": "mi estante",
@@ -58,7 +72,7 @@ class CasosPruebas(UtilCasosPrueba):
         payload = {
             "nombre": "Mi almacen 2",
             "direccion": "una direccion",
-            "telefono": "02934164454",
+            "telefono": "293-4164454",
             "secciones": []
         }
         _id = str(almacen.id)
@@ -66,6 +80,7 @@ class CasosPruebas(UtilCasosPrueba):
         self.assertEqual(respuesta.status_code, 200)
         self.assertEqual(respuesta.json()["id"], almacen.id)
         self.assertNotEqual(respuesta.json()["nombre"], almacen.nombre)
+
 
     def test_eliminar_almacen(self):
         """

@@ -6,6 +6,8 @@ import uuid
 
 class ProveedorSerializer(serializers.ModelSerializer):
     detalle = serializers.HyperlinkedIdentityField(view_name='proveedor-detail', format='html')
+    rif = serializers.RegexField(r'^[JGVE][-][0-9]{8}[-][0-9]$', max_length=12, min_length=11)
+    telefono = serializers.RegexField(r'[0-9]{3}[-][0-9]{7}$', max_length=11, min_length=11)
     class Meta:
         model = Proveedor
         fields = ("__all__")

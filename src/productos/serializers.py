@@ -10,7 +10,7 @@ class CategoriaSerializer(serializers.ModelSerializer):
         read_only_fields = ("codigo",)
 
     def create(self, datos):
-        categoria = Categoria.objects.create(**datos, codigo=uuid.uuid4())
+        categoria = Categoria.objects.create(**datos, codigo=uuid.uuid4().hex)
         return categoria
 
 class ProductoSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class ProductoSerializer(serializers.ModelSerializer):
         read_only_fields = ("cantidad", "codigo",)
 
     def create(self, datos):
-        producto = Producto.objects.create(**datos, codigo=uuid.uuid4())
+        producto = Producto.objects.create(**datos, codigo=uuid.uuid4().hex)
         producto.categoria.eliminable = False
         producto.categoria.save()
         return producto

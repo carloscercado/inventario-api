@@ -19,8 +19,8 @@ class UtilCasosPrueba(APICasoPrueba):
         self.client.credentials(HTTP_AUTHORIZATION='Basic YWRtaW5AYWRtaW4uYWRtaW46YWRtaW4=')
 
     def registrar_proveedor(self):
-        proveedor = Proveedor(rif="23923164", nombre="Paulo milanes",
-                              telefono="02934163378", direccion="mi direccion")
+        proveedor = Proveedor(rif="V-23923164-1", nombre="Paulo milanes",
+                              telefono="293-4163378", direccion="mi direccion")
         proveedor.save()
         return proveedor
 

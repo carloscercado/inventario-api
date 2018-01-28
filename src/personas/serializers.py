@@ -10,7 +10,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=30)
     password = serializers.CharField(max_length=32)
     email = serializers.EmailField()
-
+    telefono = serializers.RegexField(r'[0-9]{3}[-][0-9]{7}$', max_length=11, min_length=11)
     class Meta:
         model = Persona
         exclude = ('user',)

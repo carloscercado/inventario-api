@@ -9,7 +9,7 @@ class AlmacenSerializer(serializers.ModelSerializer):
     class Meta:
         model = Almacen
         fields = ("__all__")
-        read_only_fields = ("eliminable", "volumen")
+        read_only_fields = ("codigo",)
 
 
 class SeccionAlmacenSerializer(serializers.ModelSerializer):
@@ -44,15 +44,16 @@ class SeccionSerializer(serializers.ModelSerializer):
 
 class AlmacenDetalleSerializer(serializers.ModelSerializer):
     secciones = SeccionSerializer(many=True)
+    telefono = serializers.RegexField(r'[0-9]{3}[-][0-9]{7}$', max_length=11, min_length=11)
     class Meta:
         model = Almacen
-        fields = ("id", "nombre", "direccion", "telefono", "secciones")
-        #read_only_fields = ("eliminable", "estantes", "detalle")
+        fields = ("id", "codigo", "nombre", "direccion", "telefono", "secciones")
+        read_only_fields = ("codigo",)
 
     @transaction.atomic
     def create(self, datos):
         secciones = datos.pop("secciones")
-        almacen = Almacen.objects.create(**datos)
+        almacen = Almacen.objects.create(**datos, codigo=uuid.uuid4().hex)
         self.registrar_secciones(almacen, secciones)
         return almacen
 

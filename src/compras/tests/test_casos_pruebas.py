@@ -20,12 +20,26 @@ class CasosPruebas(UtilCasosPrueba):
         payload = {
             "nombre": "Mi proveedor",
             "direccion": "mi direccion",
-            "rif": "23923164",
-            "telefono": "0293144726"
+            "rif": "V-23923164-1",
+            "telefono": "293-1447264"
         }
         respuesta = self.client.post("/proveedores", payload, format="json")
         self.assertEqual(respuesta.status_code, 201)
 
+    def test_registrar_proveedor_rif_y_telefono_incorrecto(self):
+        """
+        Prueba el registro de un proveedor con formato de rif incorrecto
+        """
+        payload = {
+            "nombre": "Mi proveedor",
+            "direccion": "mi direccion",
+            "rif": "23923164",
+            "telefono": "0293-1447264"
+        }
+        respuesta = self.client.post("/proveedores", payload, format="json")
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertNotEqual(respuesta.json().get("rif"), None)
+        self.assertNotEqual(respuesta.json().get("telefono"), None)
 
     def test_modificar_proveedor(self):
         """
@@ -33,10 +47,10 @@ class CasosPruebas(UtilCasosPrueba):
         """
         proveedor = self.registrar_proveedor()
         payload = {
-            "nombre": "Mi proveedor 2",
+            "nombre": "Mi proveedor",
             "direccion": "mi direccion",
-            "rif": "23923164",
-            "telefono": "0293144726"
+            "rif": "V-23923164-1",
+            "telefono": "293-1447264"
         }
         _id = str(proveedor.id)
         respuesta = self.client.put("/proveedores/" + _id, payload, format="json")

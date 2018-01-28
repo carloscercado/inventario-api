@@ -18,26 +18,16 @@ class UtilCasosPrueba(APICasoPrueba):
                                               respuesta="abc", cargo="USER")
         self.client.credentials(HTTP_AUTHORIZATION='Basic YWRtaW5AYWRtaW4uYWRtaW46YWRtaW4=')
 
-    def registrar_categoria(self, nombre):
-        categoria = Categoria(nombre=nombre, codigo=uuid.uuid4().hex)
-        categoria.save()
-        return categoria
 
     def registrar_producto(self, categoria_nombre="mi categoria"):
         categoria = self.registrar_categoria(categoria_nombre)
         producto = Producto(nombre="Mi producto", categoria=categoria,
-                            medida=Producto.KG, codigo=uuid.uuid4().hex)
+                            medida=Producto.KG, codigo=uuid.uuid4())
         categoria.eliminable = False
         categoria.save()
         producto.save()
         return producto
 
-    def registrar_compra_con_detalles(self, codigo=None, categoria_nombre="mi categoria"):
-        clase = utils_casos_pruebas.UtilCasosPrueba()
-        return clase.registrar_compra_con_detalles(codigo, categoria_nombre=categoria_nombre, usuario=self.usuario)
-
     def tearDown(self):
-        Producto.objects.all().delete()
-        Categoria.objects.all().delete()
         User.objects.all().delete()
         super().tearDown()

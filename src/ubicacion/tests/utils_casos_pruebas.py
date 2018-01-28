@@ -20,7 +20,7 @@ class UtilCasosPrueba(APICasoPrueba):
 
     def registrar_almacen(self):
         almacen = Almacen(nombre="mi almacen", direccion="mi direccion",
-                          telefono="02924333323", eliminable=True, codigo=uuid.uuid4())
+                          telefono="292-4333323", eliminable=True, codigo=uuid.uuid4().hex)
         almacen.save()
         return almacen
 
@@ -42,7 +42,7 @@ class UtilCasosPrueba(APICasoPrueba):
         return clase.registrar_compra_con_detalles(codigo, categoria_nombre=categoria_nombre, usuario=usuario)
 
     def registrar_unidad(self, longi, ancho, alto, codigo=None, categoria_nombre="Mi categoria"):
-        codigo = uuid.uuid4() if codigo is None else codigo
+        codigo = uuid.uuid4().hex if codigo is None else codigo
         compra = self.registrar_compra_con_detalles(codigo, categoria_nombre=categoria_nombre)
         detalle1 = compra.detalles.all()[0]
         seccion = self.registrar_seccion()
