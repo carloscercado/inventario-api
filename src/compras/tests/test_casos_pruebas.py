@@ -106,6 +106,21 @@ class CasosPruebas(UtilCasosPrueba):
         self.assertEqual(respuesta.status_code, 201)
         self.assertEqual(len(respuesta.json().get("codigo")), 32)
 
+    def test_registrar_compra_fecha_futura(self):
+        """
+        Prueba el registro de una compra con fecha invalida
+        """
+
+        proveedor = self.registrar_proveedor()
+        payload = {
+            "fecha": "2050-01-02",
+            "proveedor": proveedor.id,
+            "detalles": []
+        }
+        respuesta = self.client.post("/compras", payload, format="json")
+        self.assertEqual(respuesta.status_code, 400)
+        self.assertNotEqual(respuesta.json().get("fecha"), None)
+
     def test_registrar_compra(self):
         """
         Prueba el registro de una compra

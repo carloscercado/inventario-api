@@ -3,6 +3,7 @@ from .models import Proveedor, Compra, DetalleCompra
 from django.db import transaction
 from rest_framework.exceptions import ValidationError
 import uuid
+import datetime
 
 class ProveedorSerializer(serializers.ModelSerializer):
     detalle = serializers.HyperlinkedIdentityField(view_name='proveedor-detail', format='html')
@@ -42,6 +43,12 @@ class CompraDetalleSerializer(CompraSerializer):
     class Meta(CompraSerializer.Meta):
         fields = ("id","codigo", "total", "fecha", "procesada", "eliminable",
                   "proveedor", "bloqueada","detalles",)
+
+    def validate_fecha(self, value):
+        hoy = datetime.datetime.today().date()
+        if value > hoy:
+            raise serializers.ValidationError("la fecha no puede ser mayor a la fecha de hoy")
+        return value
 
     @transaction.atomic
     def create(self, datos):
